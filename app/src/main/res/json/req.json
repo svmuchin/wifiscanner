@@ -1,0 +1,58 @@
+{
+  "device": {
+    "ip": "02:00:00:00:00:00",
+    "mac": "02:00:00:00:00:00",
+    "model": "Redmi 4",
+    "softVersion": "6.0.1"
+  },
+  "results": [
+    {
+      "BSSID": "00:0e:8f:d3:5b:e4",
+      "RSSI": -33,
+      "SSID": "dlink",
+      "channel": 1
+    },
+    {
+      "BSSID": "18:31:bf:07:45:5c",
+      "RSSI": -84,
+      "SSID": "CTP_5G",
+      "channel": 2
+    },
+    {
+      "BSSID": "56:27:58:a1:04:0c",
+      "RSSI": -84,
+      "SSID": "Lenovo A2010-a",
+      "channel": 0
+    },
+    {
+      "BSSID": "18:31:bf:07:45:58",
+      "RSSI": -85,
+      "SSID": "CTP",
+      "channel": 0
+    },
+    {
+      "BSSID": "fc:e3:3c:e8:f3:68",
+      "RSSI": -87,
+      "SSID": "HUAWEI-Nfa6",
+      "channel": 0
+    },
+    {
+      "BSSID": "10:bf:48:3a:32:78",
+      "RSSI": -59,
+      "SSID": "Asus v3.0",
+      "channel": 0
+    },
+    {
+      "BSSID": "fc:75:16:a4:d5:8a",
+      "RSSI": -86,
+      "SSID": "Izet_97",
+      "channel": 1
+    },
+    {
+      "BSSID": "44:82:e5:58:13:c4",
+      "RSSI": -89,
+      "SSID": "HUAWEI-x5eF",
+      "channel": 0
+    }
+  ]
+}
