@@ -3,7 +3,6 @@ package com.wifi.wifiscanner;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.net.wifi.ScanResult;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
@@ -18,8 +17,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
-import java.util.List;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
