@@ -50,7 +50,7 @@ public class Device {
     return ip;
   }
 
-  public void setIp(String ip) {
-    this.ip = ip;
+  public void setIp(int ip) {
+    this.ip = String.format("%d.%d.%d.%d", (ip & 0xff),(ip >> 8 & 0xff),(ip >> 16 & 0xff),(ip >> 24 & 0xff));
   }
 }

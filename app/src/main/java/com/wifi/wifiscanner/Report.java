@@ -5,12 +5,12 @@ import android.net.wifi.ScanResult;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Request {
+public class Report {
 
   private Device device;
   private List<Result> results;
 
-  public Request(List<ScanResult> scanResults, Device device) {
+  public Report(List<ScanResult> scanResults, Device device) {
     this.results = this.createResults(scanResults);
     this.device = device;
   }

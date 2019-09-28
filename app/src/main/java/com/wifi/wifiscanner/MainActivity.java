@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     if (ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
       this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
       this.wifiManager.startScan();
-      String msg = new Request(this.wifiManager.getScanResults(), this.createDevice(this.wifiManager.getConnectionInfo())).toString();
+      String msg = new Report(this.wifiManager.getScanResults(), this.createDevice(this.wifiManager.getConnectionInfo())).toString();
       Log.d("", msg);
     } else {
       ActivityCompat.requestPermissions(this,
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
   private Device createDevice(WifiInfo wifiInfo) {
     Device device = new Device();
     device.setMac(wifiInfo.getMacAddress());
-    device.setIp(String.valueOf(wifiInfo.getIpAddress()));
+    device.setIp(wifiInfo.getIpAddress());
     device.setModel(Build.MODEL);
     device.setSoftVersion(Build.VERSION.RELEASE);
     return device;
