@@ -7,45 +7,51 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
 public class MainActivity extends AppCompatActivity {
 
   private WifiManager wifiManager;
+  private RecyclerView networksRecycler;
+  private Button scanButton;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
-    Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-    setSupportActionBar(toolbar);
-
-    FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-    fab.setOnClickListener(new View.OnClickListener() {
+    this.setContentView(R.layout.activity_main);
+    this.setSupportActionBar((Toolbar) this.findViewById(R.id.toolbar));
+    this.scanButton = this.findViewById(R.id.button_scan);
+    this.networksRecycler = this.findViewById(R.id.networks_recycler);
+    this.networksRecycler.addItemDecoration(new NetworkDivider(this, R.drawable.network_divider));
+    this.scanButton.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View view) {
         scan();
-        Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-            .setAction("Action", null).show();
       }
     });
   }
 
   @Override
+  protected void onResume() {
+    super.onResume();
+    this.networksRecycler.setAdapter(new NetworksAdapter(new Report()));
+  }
+
+  @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.menu_main, menu);
+    this.getMenuInflater().inflate(R.menu.menu_main, menu);
     return true;
   }
 
@@ -66,13 +72,16 @@ public class MainActivity extends AppCompatActivity {
 
   public void scan() {
     if (ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-      this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+      this.wifiManager = (WifiManager) this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
       this.wifiManager.startScan();
-      String msg = new Report(this.wifiManager.getScanResults(), this.createDevice(this.wifiManager.getConnectionInfo())).toString();
-      Log.d("", msg);
+      // TODO: для тестирования start
+      // this.report = new Report(this.wifiManager.getScanResults(), this.createDevice(this.wifiManager.getConnectionInfo()));
+      StubReport report = new StubReport();
+      this.networksRecycler.setAdapter(new NetworksAdapter(report));
+      // TODO: для тестирования end
+      Log.d("NET_SCAN", report.toString());
     } else {
-      ActivityCompat.requestPermissions(this,
-          new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+      ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
     }
   }
 

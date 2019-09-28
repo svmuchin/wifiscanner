@@ -10,9 +10,14 @@ public class Report {
   private Device device;
   private List<Result> results;
 
+  public Report() {
+    this.device = new Device();
+    this.results = new ArrayList<>();
+  }
+
   public Report(List<ScanResult> scanResults, Device device) {
-    this.results = this.createResults(scanResults);
     this.device = device;
+    this.results = this.createResults(scanResults);
   }
 
   public List<Result> getResults() {
