@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Wifiscanner</string>
     <string name="action_settings">Settings</string>
+    <string name="button_scan_text">Сканировать</string>
+    <string name="network_signal_title_text">Сигнал</string>
+    <string name="network_address_title_text">IP Адрес</string>
+    <string name="network_channel_title_text">Канал</string>
+    <color name="green">#00B000</color>
+    <color name="bg_main">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
 </resources>
