@@ -5,14 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+
     <TextView
         android:id="@+id/network_name"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
         android:layout_weight="1"
         android:maxLines='1'
         android:textSize="18sp"
@@ -26,16 +27,18 @@
         android:id="@+id/network_signal_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
+        android:gravity="end"
         android:maxLines='1'
         android:text="@string/network_signal_title_text"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/network_address_title"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/guideline_right"
         app:layout_constraintTop_toBottomOf="@+id/network_name"
         tools:text="Сигнал:" />
 
@@ -43,16 +46,16 @@
         android:id="@+id/network_address_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
         android:maxLines='1'
         android:text="@string/network_address_title_text"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/network_channel_title"
-        app:layout_constraintStart_toEndOf="@+id/network_signal_title"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_left"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/network_name"
         tools:text="IP адрес:" />
 
@@ -60,16 +63,18 @@
         android:id="@+id/network_channel_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
+        android:gravity="end"
         android:maxLines='1'
         android:text="@string/network_channel_title_text"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/network_address_title"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_right"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/guideline_left"
         app:layout_constraintTop_toBottomOf="@+id/network_name"
         tools:text="Канал:" />
 
@@ -77,29 +82,30 @@
         android:id="@+id/network_signal_value"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
+        android:gravity="end"
         android:maxLines='1'
         android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/network_address_value"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/network_signal_title"
         app:layout_constraintTop_toBottomOf="@+id/network_signal_title"
+        app:layout_constraintStart_toEndOf="@+id/guideline_right"
         tools:text="Огонь!" />
 
     <TextView
         android:id="@+id/network_address_value"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
         android:maxLines='1'
         android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/network_channel_value"
-        app:layout_constraintStart_toEndOf="@+id/network_signal_value"
+        app:layout_constraintStart_toStartOf="@+id/network_address_title"
+        app:layout_constraintEnd_toStartOf="@+id/guideline_left"
         app:layout_constraintTop_toBottomOf="@+id/network_address_title"
         tools:text="Чётенький!" />
 
@@ -107,15 +113,30 @@
         android:id="@+id/network_channel_value"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="1dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginTop="1dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="2dp"
+        android:gravity="end"
         android:maxLines='1'
         android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/network_address_value"
+        app:layout_constraintEnd_toEndOf="@+id/network_channel_title"
+        app:layout_constraintStart_toEndOf="@+id/guideline_left"
         app:layout_constraintTop_toBottomOf="@+id/network_channel_title"
         tools:text="Телевизионный!" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.75" />
 
 </android.support.constraint.ConstraintLayout>
