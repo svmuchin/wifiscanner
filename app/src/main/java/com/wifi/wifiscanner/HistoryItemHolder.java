@@ -7,13 +7,16 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 
-public class HistoryItemHolder extends RecyclerView.ViewHolder {
+public class HistoryItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
     private TextView date;
     private TextView time;
+    private OnElementClickListener onClickListener;
 
-    public HistoryItemHolder(@NonNull View itemView) {
+    public HistoryItemHolder(@NonNull View itemView, OnElementClickListener onClickListener) {
         super(itemView);
+        this.onClickListener = onClickListener;
+        itemView.setOnClickListener(this);
         this.date = itemView.findViewById(R.id.history_item_created_date_value);
         this.time = itemView.findViewById(R.id.history_item_created_time_value);
     }
@@ -31,5 +34,10 @@ public class HistoryItemHolder extends RecyclerView.ViewHolder {
             return "0" + i;
         }
         return Integer.toString(i);
+    }
+
+    @Override
+    public void onClick(View v) {
+        this.onClickListener.onElementClick(this.getLayoutPosition());
     }
 }

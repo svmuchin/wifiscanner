@@ -25,14 +25,14 @@
         tools:layout_editor_absoluteY="678dp" />
 
     <Button
-        android:id="@+id/main_button_history"
-        android:layout_width="110dp"
+        android:id="@+id/main_button_save"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:background="@color/bg_green"
         android:textColor="@color/white"
-        android:text="@string/main_button_history_text"
-        app:layout_constraintStart_toEndOf="@+id/main_button_save"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/main_button_save_text"
+        app:layout_constraintStart_toEndOf="@+id/main_button_scan"
+        app:layout_constraintEnd_toStartOf="@+id/main_button_send"
         app:layout_constraintTop_toBottomOf="@+id/guideline_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -41,14 +41,30 @@
         tools:layout_editor_absoluteY="678dp" />
 
     <Button
-        android:id="@+id/main_button_save"
-        android:layout_width="110dp"
+        android:id="@+id/main_button_send"
+        android:layout_width="90dp"
         android:layout_height="wrap_content"
         android:background="@color/bg_green"
         android:textColor="@color/white"
-        android:text="@string/main_button_save_text"
-        app:layout_constraintStart_toEndOf="@+id/main_button_scan"
+        android:text="@string/main_button_send_text"
+        app:layout_constraintStart_toEndOf="@+id/main_button_save"
         app:layout_constraintEnd_toStartOf="@+id/main_button_history"
+        app:layout_constraintTop_toBottomOf="@+id/guideline_bottom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.5"
+        tools:layout_editor_absoluteX="160dp"
+        tools:layout_editor_absoluteY="678dp" />
+
+    <Button
+        android:id="@+id/main_button_history"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_green"
+        android:textColor="@color/white"
+        android:text="@string/main_button_history_text"
+        app:layout_constraintStart_toEndOf="@+id/main_button_send"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/guideline_bottom"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
