@@ -9,7 +9,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-public class NetworkDivider extends DividerItemDecoration {
+public class Divider extends DividerItemDecoration {
 
     private static final int[] ATTRS = new int[]{android.R.attr.listDivider};
 
@@ -18,7 +18,7 @@ public class NetworkDivider extends DividerItemDecoration {
     /**
      * Default divider will be used
      */
-    public NetworkDivider(Context context) {
+    public Divider(Context context) {
         super(context, DividerItemDecoration.HORIZONTAL);
         final TypedArray styledAttributes = context.obtainStyledAttributes(ATTRS);
         this.divider = styledAttributes.getDrawable(0);
@@ -28,7 +28,7 @@ public class NetworkDivider extends DividerItemDecoration {
     /**
      * Custom divider will be used
      */
-    public NetworkDivider(Context context, int resId) {
+    public Divider(Context context, int resId) {
         super(context, DividerItemDecoration.HORIZONTAL);
         this.divider = ContextCompat.getDrawable(context, resId);
     }
