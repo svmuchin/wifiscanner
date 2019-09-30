@@ -1,11 +1,20 @@
 <resources>
+    <string name="title_activity_show">Отчёт из истории</string>
+    <string name="title_activity_history">История</string>
+    <string name="title_activity_main">Сканирование</string>
+    <color name="bg_green">#00B000</color>
+    <color name="bg_main">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
     <string name="app_name">Wifiscanner</string>
     <string name="action_settings">Settings</string>
-    <string name="button_scan_text">Сканировать</string>
+    <string name="main_button_scan_text">Сканировать</string>
+    <string name="main_button_history_text">История</string>
+    <string name="main_button_send_text">Отправить</string>
+    <string name="main_button_save_text">Сохранить</string>
     <string name="network_signal_title_text">Сигнал</string>
     <string name="network_address_title_text">IP Адрес</string>
     <string name="network_channel_title_text">Канал</string>
-    <color name="green">#00B000</color>
-    <color name="bg_main">#FFFFFF</color>
-    <color name="white">#FFFFFF</color>
+    <string name="history_item_create_date_text">Дата:</string>
+    <string name="history_item_create_time_text">Время:</string>
+    <string name="show_button_send_text">Отправить</string>
 </resources>

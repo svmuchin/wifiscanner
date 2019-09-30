@@ -3,21 +3,37 @@ package com.wifi.wifiscanner;
 import android.net.wifi.ScanResult;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 public class Report {
 
+  private String id;
+  private Calendar calendar;
   private Device device;
   private List<Result> results;
 
   public Report() {
+    this.id = UUID.randomUUID().toString();
+    this.calendar = Calendar.getInstance();
     this.device = new Device();
     this.results = new ArrayList<>();
   }
 
   public Report(List<ScanResult> scanResults, Device device) {
+    this.id = UUID.randomUUID().toString();
+    this.calendar = Calendar.getInstance();
     this.device = device;
     this.results = this.createResults(scanResults);
+  }
+
+  public String getId() {
+    return id;
+  }
+
+  public Calendar getCalendar() {
+    return calendar;
   }
 
   public List<Result> getResults() {
@@ -36,11 +52,6 @@ public class Report {
     this.device = device;
   }
 
-  @Override
-  public String toString() {
-    return Serializer.Serialize(this);
-  }
-
   private List<Result> createResults(List<ScanResult> scanResults) {
     List<Result> results = new ArrayList<>();
     for (ScanResult scanResult : scanResults) {
@@ -52,5 +63,10 @@ public class Report {
       results.add(result);
     }
     return results;
+  }
+
+  @Override
+  public String toString() {
+    return Serializer.Serialize(this);
   }
 }
