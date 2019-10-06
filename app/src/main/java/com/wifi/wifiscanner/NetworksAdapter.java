@@ -32,6 +32,4 @@ public class NetworksAdapter extends RecyclerView.Adapter<NetworkHolder> {
     public int getItemCount() {
         return this.report.getResults().size();
     }
-
-
 }

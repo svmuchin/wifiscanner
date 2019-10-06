@@ -2,29 +2,30 @@ package com.wifi.wifiscanner;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.concurrent.TimeUnit;
-
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-  private WifiManager wifiManager;
+  public static final String BROADCAST_ACTION = "com.wifi.wifiscanner";
+
   private RecyclerView networksRecycler;
   private Report report = new Report();
+  private ScanBroadcastReceiver broadcastReceiver;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -41,12 +42,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     historyButton.setOnClickListener(this);
     saveButton.setOnClickListener(this);
     sendButton.setOnClickListener(this);
+    IntentFilter intentFilter = new IntentFilter(BROADCAST_ACTION);
+    this.broadcastReceiver = new ScanBroadcastReceiver();
+    registerReceiver(this.broadcastReceiver, intentFilter);
+    this.report = this.getReport();
+    this.setAdapter(this.report);
   }
 
   @Override
   protected void onResume() {
     super.onResume();
-    this.networksRecycler.setAdapter(new NetworksAdapter(this.report));
+    this.report = this.getReport();
+    this.setAdapter(this.report);
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    unregisterReceiver(this.broadcastReceiver);
+    stopService(new Intent(this, ScanService.class));
   }
 
   @Override
@@ -67,7 +81,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     if (id == R.id.action_settings) {
       return true;
     }
-
     return super.onOptionsItemSelected(item);
   }
 
@@ -94,15 +107,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
   public void scan() {
     if (ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-      ScanAsyncTask asyncTask = new ScanAsyncTask();
-      try {
-        asyncTask.execute(this);
-        asyncTask.get(3l, TimeUnit.SECONDS);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
+      this.serviceScan();
     } else {
       ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
     }
+  }
+
+  private Report getReport() {
+    return Serializer.Deserialize( getIntent().getStringExtra(ScanService.REPORT_DATA), Report.class);
+  }
+
+  private void setAdapter(Report report) {
+    if (report != null && !report.getResults().isEmpty()) {
+      this.networksRecycler.setAdapter(new NetworksAdapter(report));
+    }
+  }
+
+  private void serviceScan() {
+    startService(new Intent(this, ScanService.class));
   }
 }
