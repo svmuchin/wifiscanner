@@ -32,6 +32,7 @@ public class ScanService extends Service {
     Log.d(SCAN_SERVICE_TAG, " onStartCommand");
     this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     wiFiBinder = new WiFiBinder(this);
+    this.scan();
     return wiFiBinder;
   }
 
