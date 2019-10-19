@@ -67,6 +67,7 @@ public class ScanService extends Service {
       public void run() {
         while (true) {
           try {
+            wifiManager.startScan();
             report = new Report(wifiManager.getScanResults(), this.createDevice(wifiManager.getConnectionInfo()));
 //            report = new StubReport();
             Intent intent = new Intent(MainActivity.BROADCAST_ACTION);
