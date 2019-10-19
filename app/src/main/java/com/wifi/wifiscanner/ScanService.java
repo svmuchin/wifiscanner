@@ -10,6 +10,8 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 
@@ -19,11 +21,18 @@ public class ScanService extends Service {
   public static final String REPORT_DATA = "REPORT_DATA";
 
   private WifiManager wifiManager;
+  private Report report;
+  private WiFiBinder wiFiBinder;
+  private TimerTask task;
+  private Timer timer = new Timer();
 
   @Nullable
   @Override
   public IBinder onBind(Intent intent) {
-    return null;
+    Log.d(SCAN_SERVICE_TAG, " onStartCommand");
+    this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+    wiFiBinder = new WiFiBinder(this);
+    return wiFiBinder;
   }
 
   @Override
@@ -36,7 +45,6 @@ public class ScanService extends Service {
   public int onStartCommand(Intent intent, int flags, int startId) {
     Log.d(SCAN_SERVICE_TAG, " onStartCommand");
     this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-    this.scan(wifiManager);
     return super.onStartCommand(intent, flags, startId);
   }
 
@@ -46,14 +54,21 @@ public class ScanService extends Service {
     super.onDestroy();
   }
 
-  void scan(final WifiManager wifiManager) {
-    new Thread(new Runnable() {
+  public Report getReport() {
+    return report;
+  }
+
+  public Report scan() {
+    if (task != null) {
+      task.cancel();
+    }
+    task = new TimerTask() {
       @Override
       public void run() {
         while (true) {
           try {
-//            Report report = new Report(wifiManager.getScanResults(), this.createDevice(wifiManager.getConnectionInfo()));
-            StubReport report = new StubReport();
+            report = new Report(wifiManager.getScanResults(), this.createDevice(wifiManager.getConnectionInfo()));
+//            report = new StubReport();
             Intent intent = new Intent(MainActivity.BROADCAST_ACTION);
             intent.putExtra(REPORT_DATA, report.toString());
             sendBroadcast(intent);
@@ -73,6 +88,8 @@ public class ScanService extends Service {
         device.setSoftVersion(Build.VERSION.RELEASE);
         return device;
       }
-    }).start();
+    };
+    timer.schedule(task, 0, 1000);
+    return report;
   }
 }

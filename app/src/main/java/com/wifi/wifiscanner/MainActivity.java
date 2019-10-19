@@ -2,7 +2,6 @@ package com.wifi.wifiscanner;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -10,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
   private RecyclerView networksRecycler;
   private Report report = new Report();
-  private ScanBroadcastReceiver broadcastReceiver;
+  private WiFiServiceConnection conn;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +40,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     historyButton.setOnClickListener(this);
     saveButton.setOnClickListener(this);
     sendButton.setOnClickListener(this);
-    IntentFilter intentFilter = new IntentFilter(BROADCAST_ACTION);
-    this.broadcastReceiver = new ScanBroadcastReceiver();
-    registerReceiver(this.broadcastReceiver, intentFilter);
+    Intent serviceIntent = new Intent(this, ScanService.class);
+    conn = new WiFiServiceConnection();
+    bindService(serviceIntent, conn, BIND_AUTO_CREATE);
     this.report = this.getReport();
     this.setAdapter(this.report);
   }
@@ -59,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    unregisterReceiver(this.broadcastReceiver);
     stopService(new Intent(this, ScanService.class));
   }
 
@@ -114,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   }
 
   private Report getReport() {
-    return Serializer.Deserialize( getIntent().getStringExtra(ScanService.REPORT_DATA), Report.class);
+    return Serializer.Deserialize(getIntent().getStringExtra(ScanService.REPORT_DATA), Report.class);
   }
 
   private void setAdapter(Report report) {
@@ -124,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   }
 
   private void serviceScan() {
-    startService(new Intent(this, ScanService.class));
+    this.report = conn.getService().scan();
+    this.setAdapter(this.report);
   }
 }
