@@ -1,4 +1,4 @@
-package com.wifi.wifiscanner;
+package com.wifi.wifiscanner.dto;
 
 import java.util.ArrayList;
 import java.util.List;

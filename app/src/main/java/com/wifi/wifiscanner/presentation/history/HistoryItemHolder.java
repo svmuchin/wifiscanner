@@ -1,9 +1,13 @@
-package com.wifi.wifiscanner;
+package com.wifi.wifiscanner.presentation.history;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
+
+import com.wifi.wifiscanner.R;
+import com.wifi.wifiscanner.dto.Report;
+import com.wifi.wifiscanner.presentation.OnElementClickListener;
 
 import java.util.Calendar;
 
