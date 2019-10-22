@@ -9,6 +9,8 @@ import com.wifi.wifiscanner.R;
 import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.presentation.OnElementClickListener;
 
+import com.wifi.wifiscanner.da.Report;
+
 import java.util.Calendar;
 
 public class HistoryItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

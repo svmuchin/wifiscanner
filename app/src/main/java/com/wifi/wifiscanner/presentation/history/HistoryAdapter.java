@@ -11,6 +11,8 @@ import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.presentation.OnElementClickListener;
 import com.wifi.wifiscanner.presentation.OnReportClickListener;
 
+import com.wifi.wifiscanner.da.Report;
+
 import java.util.List;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryItemHolder> implements OnElementClickListener {
