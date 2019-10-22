@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.wifi.wifiscanner.da.Report;
+
 public class ShowActivity extends AppCompatActivity implements View.OnClickListener {
 
     public static final String REPORT_ID = "SELECTED_REPORT_ID";

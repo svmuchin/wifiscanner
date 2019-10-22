@@ -1,5 +1,7 @@
 package com.wifi.wifiscanner;
 
+import com.wifi.wifiscanner.da.Report;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;

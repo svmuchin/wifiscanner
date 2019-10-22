@@ -15,6 +15,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.wifi.wifiscanner.da.Report;
+
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -111,16 +113,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   }
 
   private Report getReport() {
-    return Serializer.Deserialize(getIntent().getStringExtra(ScanService.REPORT_DATA), Report.class);
+    return Serializer.deserialize(getIntent().getStringExtra(ScanService.REPORT_DATA), Report.class);
   }
 
   private void setAdapter(Report report) {
-    if (report != null && !report.getResults().isEmpty()) {
+    if (report != null && !report.getAccessPoints().isEmpty()) {
       this.networksRecycler.setAdapter(new NetworksAdapter(report));
     }
   }
 
   private void serviceScan() {
+    HistoryAsyncTask asyncTask = new HistoryAsyncTask();
+    asyncTask.execute(this);
     this.report = conn.getService().scan();
     this.setAdapter(this.report);
   }

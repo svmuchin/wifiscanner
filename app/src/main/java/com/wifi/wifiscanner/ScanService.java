@@ -10,6 +10,9 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.wifi.wifiscanner.da.Device;
+import com.wifi.wifiscanner.da.Report;
+
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
@@ -69,8 +72,8 @@ public class ScanService extends Service {
         while (true) {
           try {
             wifiManager.startScan();
-            report = new Report(wifiManager.getScanResults(), this.createDevice(wifiManager.getConnectionInfo()));
-//            report = new StubReport();
+//            report = new Report(wifiManager.getScanResults(), this.createDevice(wifiManager.getConnectionInfo()));
+            report = new StubReport();
             Intent intent = new Intent(MainActivity.BROADCAST_ACTION);
             intent.putExtra(REPORT_DATA, report.toString());
             sendBroadcast(intent);

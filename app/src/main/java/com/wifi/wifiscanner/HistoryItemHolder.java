@@ -5,6 +5,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.wifi.wifiscanner.da.Report;
+
 import java.util.Calendar;
 
 public class HistoryItemHolder extends RecyclerView.ViewHolder implements View.OnClickListener {

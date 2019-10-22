@@ -1,5 +1,7 @@
 package com.wifi.wifiscanner;
 
+import com.wifi.wifiscanner.da.Report;
+
 import java.util.List;
 
 public interface Storage {

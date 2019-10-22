@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.wifi.wifiscanner.da.Report;
+
 import java.util.List;
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryItemHolder> implements OnElementClickListener {
