@@ -6,9 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.wifi.wifiscanner.R;
-import com.wifi.wifiscanner.dto.Result;
 
-import com.wifi.wifiscanner.da.AccessPoint;
+import com.wifi.wifiscanner.dto.AccessPoint;
 
 public class NetworkHolder extends RecyclerView.ViewHolder {
 

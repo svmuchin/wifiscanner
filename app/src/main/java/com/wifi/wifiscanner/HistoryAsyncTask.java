@@ -5,10 +5,11 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import com.wifi.wifiscanner.da.Report;
+import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.da.ReportDao;
 import com.wifi.wifiscanner.da.ReportDatabase;
-import com.wifi.wifiscanner.da.ReportEntity;
+import com.wifi.wifiscanner.dto.ReportEntity;
+import com.wifi.wifiscanner.dto.StubReport;
 
 import java.util.List;
 

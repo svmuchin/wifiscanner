@@ -3,6 +3,7 @@ package com.wifi.wifiscanner.presentation.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -15,35 +16,28 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.wifi.wifiscanner.HistoryAsyncTask;
 import com.wifi.wifiscanner.R;
-import com.wifi.wifiscanner.dto.Device;
+import com.wifi.wifiscanner.ScanService;
+import com.wifi.wifiscanner.WiFiServiceConnection;
 import com.wifi.wifiscanner.dto.Report;
-import com.wifi.wifiscanner.dto.StubReport;
 import com.wifi.wifiscanner.presentation.Divider;
 import com.wifi.wifiscanner.presentation.network.NetworksAdapter;
 import com.wifi.wifiscanner.rest.RestClient;
 import com.wifi.wifiscanner.storage.SimpleStorage;
-import com.wifi.wifiscanner.util.Constants;
-
-import com.wifi.wifiscanner.da.Report;
+import com.wifi.wifiscanner.util.Serializer;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-  public static final String BROADCAST_ACTION = "com.wifi.wifiscanner";
-
   private RecyclerView networksRecycler;
   private Report report = new Report();
   private WiFiServiceConnection conn;
-    // TODO: убрать после реализации авторизации
-    private static final String EMAIL = "mail@mail.com";
-    private static final String PASSWORD = "UNQHezQI2mMjMlsnJyXP";
-
-    private WifiManager wifiManager;
-    private RecyclerView networksRecycler;
-    private Report report = new Report();
-    public RestClient restClient;
+  public RestClient restClient;
+  // TODO: убрать после реализации авторизации
+  private static final String EMAIL = "mail@mail.com";
+  private static final String PASSWORD = "UNQHezQI2mMjMlsnJyXP";
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -65,27 +59,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     bindService(serviceIntent, conn, BIND_AUTO_CREATE);
     this.report = this.getReport();
     this.setAdapter(this.report);
-  }
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_main);
-        this.restClient = new RestClient(this);
-        this.setSupportActionBar((Toolbar) this.findViewById(R.id.main_toolbar));
-        this.networksRecycler = this.findViewById(R.id.networks_recycler);
-        this.networksRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
-        Button scanButton = this.findViewById(R.id.main_button_scan);
-        Button historyButton = this.findViewById(R.id.main_button_history);
-        Button saveButton = this.findViewById(R.id.main_button_save);
-        Button sendButton = this.findViewById(R.id.main_button_send);
-        scanButton.setOnClickListener(this);
-        historyButton.setOnClickListener(this);
-        saveButton.setOnClickListener(this);
-        sendButton.setOnClickListener(this);
-        if (!this.restClient.isAuthorized()) {
-            this.restClient.signUp(EMAIL, PASSWORD);
-        }
+    if (!this.restClient.isAuthorized()) {
+      this.restClient.signUp(EMAIL, PASSWORD);
     }
+  }
 
   @Override
   protected void onResume() {
@@ -121,26 +98,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     return super.onOptionsItemSelected(item);
   }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.main_button_scan:
-                this.scan();
-                break;
-            case R.id.main_button_history:
-                Intent historyIntent = new Intent(this, HistoryActivity.class);
-                this.startActivity(historyIntent);
-                break;
-            case R.id.main_button_save:
-                SimpleStorage.getStorage().save(this.report);
-                Toast.makeText(this, "Отчёт сохранён.", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.main_button_send:
-                this.restClient.sendReport(this.report);
-                Toast.makeText(this, "Отчёт отправлен.", Toast.LENGTH_SHORT).show();
-                break;
-        }
+  @Override
+  public void onClick(View v) {
+    switch (v.getId()) {
+      case R.id.main_button_scan:
+        this.scan();
+        break;
+      case R.id.main_button_history:
+        Intent historyIntent = new Intent(this, HistoryActivity.class);
+        this.startActivity(historyIntent);
+        break;
+      case R.id.main_button_save:
+        SimpleStorage.getStorage().save(this.report);
+        Toast.makeText(this, "Отчёт сохранён.", Toast.LENGTH_SHORT).show();
+        break;
+      case R.id.main_button_send:
+        this.restClient.sendReport(this.report);
+        Toast.makeText(this, "Отчёт отправлен.", Toast.LENGTH_SHORT).show();
+        break;
     }
+  }
 
   public void scan() {
     if (ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {

@@ -1,9 +1,5 @@
 package com.wifi.wifiscanner.dto;
 
-import com.wifi.wifiscanner.da.AccessPoint;
-import com.wifi.wifiscanner.da.Device;
-import com.wifi.wifiscanner.da.Report;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -7,11 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wifi.wifiscanner.R;
-import com.wifi.wifiscanner.dto.Report;
-import com.wifi.wifiscanner.dto.Result;
 
-import com.wifi.wifiscanner.da.AccessPoint;
-import com.wifi.wifiscanner.da.Report;
+import com.wifi.wifiscanner.dto.AccessPoint;
+import com.wifi.wifiscanner.dto.Report;
 
 public class NetworksAdapter extends RecyclerView.Adapter<NetworkHolder> {
 

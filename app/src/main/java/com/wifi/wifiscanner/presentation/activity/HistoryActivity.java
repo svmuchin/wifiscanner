@@ -8,13 +8,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
 import com.wifi.wifiscanner.R;
-import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.presentation.Divider;
 import com.wifi.wifiscanner.presentation.OnReportClickListener;
 import com.wifi.wifiscanner.presentation.history.HistoryAdapter;
 import com.wifi.wifiscanner.storage.SimpleStorage;
 
-import com.wifi.wifiscanner.da.Report;
+import com.wifi.wifiscanner.dto.Report;
 
 public class HistoryActivity extends AppCompatActivity implements OnReportClickListener {
 

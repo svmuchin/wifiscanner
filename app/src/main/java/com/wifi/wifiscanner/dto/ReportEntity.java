@@ -1,9 +1,11 @@
-package com.wifi.wifiscanner.da;
+package com.wifi.wifiscanner.dto;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
 import android.support.annotation.NonNull;
+
+import com.wifi.wifiscanner.da.ReportConverter;
 
 @Entity
 public class ReportEntity {

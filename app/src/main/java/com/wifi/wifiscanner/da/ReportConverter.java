@@ -2,7 +2,8 @@ package com.wifi.wifiscanner.da;
 
 import android.arch.persistence.room.TypeConverter;
 
-import com.wifi.wifiscanner.Serializer;
+import com.wifi.wifiscanner.dto.Report;
+import com.wifi.wifiscanner.util.Serializer;
 
 public class ReportConverter {
 

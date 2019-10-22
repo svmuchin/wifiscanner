@@ -1,4 +1,4 @@
-package com.wifi.wifiscanner.da;
+package com.wifi.wifiscanner.dto;
 
 public class AccessPoint {
 
