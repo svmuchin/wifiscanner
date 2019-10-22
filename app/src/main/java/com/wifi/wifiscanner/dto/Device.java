@@ -1,5 +1,7 @@
 package com.wifi.wifiscanner.dto;
 
+import com.wifi.wifiscanner.util.Serializer;
+
 public class Device {
 
   /**
@@ -51,6 +53,15 @@ public class Device {
   }
 
   public void setIp(int ip) {
-    this.ip = String.format("%d.%d.%d.%d", (ip & 0xff),(ip >> 8 & 0xff),(ip >> 16 & 0xff),(ip >> 24 & 0xff));
+    this.ip = String.format("%d.%d.%d.%d", (ip & 0xff), (ip >> 8 & 0xff), (ip >> 16 & 0xff), (ip >> 24 & 0xff));
+  }
+
+  public static Device deviceFromJson(String str) {
+    return Serializer.deserialize(str, Device.class);
+  }
+
+  @Override
+  public String toString() {
+    return Serializer.serialize(this);
   }
 }

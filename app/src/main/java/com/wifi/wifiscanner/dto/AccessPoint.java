@@ -1,6 +1,6 @@
 package com.wifi.wifiscanner.dto;
 
-public class Result {
+public class AccessPoint {
 
   /**
    * Имя

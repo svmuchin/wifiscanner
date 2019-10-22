@@ -17,4 +17,5 @@
     <string name="history_item_create_date_text">Дата:</string>
     <string name="history_item_create_time_text">Время:</string>
     <string name="show_button_send_text">Отправить</string>
+    <string name="start">start</string>
 </resources>

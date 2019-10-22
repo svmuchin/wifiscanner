@@ -6,7 +6,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.wifi.wifiscanner.R;
-import com.wifi.wifiscanner.dto.Result;
+
+import com.wifi.wifiscanner.dto.AccessPoint;
 
 public class NetworkHolder extends RecyclerView.ViewHolder {
 
@@ -39,7 +40,7 @@ public class NetworkHolder extends RecyclerView.ViewHolder {
         return channel;
     }
 
-    public void bind(Result networkInfo) {
+    public void bind(AccessPoint networkInfo) {
         this.name.setText(networkInfo.getSSID());
         this.address.setText(networkInfo.getBSSID());
         this.signal.setText(Integer.toString(networkInfo.getRSSI()));

@@ -7,8 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wifi.wifiscanner.R;
+
+import com.wifi.wifiscanner.dto.AccessPoint;
 import com.wifi.wifiscanner.dto.Report;
-import com.wifi.wifiscanner.dto.Result;
 
 public class NetworksAdapter extends RecyclerView.Adapter<NetworkHolder> {
 
@@ -28,14 +29,12 @@ public class NetworksAdapter extends RecyclerView.Adapter<NetworkHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull NetworkHolder networkHolder, int i) {
-        Result networkInfo = this.report.getResults().get(i);
+        AccessPoint networkInfo = this.report.getAccessPoints().get(i);
         networkHolder.bind(networkInfo);
     }
 
     @Override
     public int getItemCount() {
-        return this.report.getResults().size();
+        return this.report.getAccessPoints().size();
     }
-
-
 }

@@ -12,22 +12,25 @@ import java.util.UUID;
 public class Report {
 
   private String id;
+
   private Calendar calendar;
+
   private Device device;
-  private List<Result> results;
+
+  private List<AccessPoint> accessPoints;
 
   public Report() {
     this.id = UUID.randomUUID().toString();
     this.calendar = Calendar.getInstance();
     this.device = new Device();
-    this.results = new ArrayList<>();
+    this.accessPoints = new ArrayList<>();
   }
 
   public Report(List<ScanResult> scanResults, Device device) {
     this.id = UUID.randomUUID().toString();
     this.calendar = Calendar.getInstance();
     this.device = device;
-    this.results = this.createResults(scanResults);
+    this.accessPoints = this.createResults(scanResults);
   }
 
   public String getId() {
@@ -38,12 +41,12 @@ public class Report {
     return calendar;
   }
 
-  public List<Result> getResults() {
-    return results;
+  public List<AccessPoint> getAccessPoints() {
+    return accessPoints;
   }
 
-  public void setResults(List<Result> results) {
-    this.results = results;
+  public void setAccessPoints(List<AccessPoint> accessPoints) {
+    this.accessPoints = accessPoints;
   }
 
   public Device getDevice() {
@@ -54,17 +57,25 @@ public class Report {
     this.device = device;
   }
 
-  private List<Result> createResults(List<ScanResult> scanResults) {
-    List<Result> results = new ArrayList<>();
+  public void setId(String id) {
+    this.id = id;
+  }
+
+  public void setCalendar(Calendar calendar) {
+    this.calendar = calendar;
+  }
+
+  private List<AccessPoint> createResults(List<ScanResult> scanResults) {
+    List<AccessPoint> accessPoints = new ArrayList<>();
     for (ScanResult scanResult : scanResults) {
-      Result result = new Result();
-      result.setSSID(scanResult.SSID);
-      result.setBSSID(scanResult.BSSID);
-      result.setChannel(scanResult.channelWidth);
-      result.setRSSI(scanResult.level);
-      results.add(result);
+      AccessPoint accessPoint = new AccessPoint();
+      accessPoint.setSSID(scanResult.SSID);
+      accessPoint.setBSSID(scanResult.BSSID);
+      accessPoint.setChannel(scanResult.channelWidth);
+      accessPoint.setRSSI(scanResult.level);
+      accessPoints.add(accessPoint);
     }
-    return results;
+    return accessPoints;
   }
 
   @Override

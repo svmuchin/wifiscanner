@@ -6,8 +6,9 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.wifi.wifiscanner.R;
-import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.presentation.OnElementClickListener;
+
+import com.wifi.wifiscanner.dto.Report;
 
 import java.util.Calendar;
 
