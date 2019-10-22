@@ -1,4 +1,4 @@
-package com.wifi.wifiscanner;
+package com.wifi.wifiscanner.services.history;
 
 import android.arch.persistence.room.Room;
 import android.content.Context;
@@ -18,15 +18,15 @@ public class HistoryAsyncTask extends AsyncTask<Context, Void, Void> {
 
   @Override
   protected Void doInBackground(Context... contexts) {
-    Context con = null;
-    for (Context context : contexts) {
-      con = context;
-    }
-    this.insert(con);
+//    Context con = null;
+//    for (Context context : contexts) {
+//      con = context;
+//    }
+//    this.insert(con);
     return null;
   }
 
-  private void insert(final Context context) {
+  public void insert(final Context context, final Report report) {
     final Thread thread = new Thread() {
       @Override
       public void run() {
@@ -34,8 +34,7 @@ public class HistoryAsyncTask extends AsyncTask<Context, Void, Void> {
             .fallbackToDestructiveMigration()
             .build();
         ReportDao dao = db.reportDao();
-        Report report = new StubReport();
-        ReportEntity entity = new ReportEntity(1, report);
+        ReportEntity entity = new ReportEntity(report);
         dao.insert(entity);
         List<ReportEntity> reports = dao.getAll();
         Log.d("INSERT", reports.toString());
@@ -45,4 +44,8 @@ public class HistoryAsyncTask extends AsyncTask<Context, Void, Void> {
     thread.start();
   }
 
+  @Override
+  protected void onPostExecute(Void aVoid) {
+    super.onPostExecute(aVoid);
+  }
 }

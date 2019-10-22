@@ -28,7 +28,8 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".ScanService" />
+        <service android:name=".services.scan.ScanService" />
+        <service android:name=".services.history.HistoryService" />
     </application>
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />

@@ -1,4 +1,4 @@
-package com.wifi.wifiscanner;
+package com.wifi.wifiscanner.services.scan;
 
 import android.app.Service;
 import android.content.Context;
@@ -13,7 +13,6 @@ import android.util.Log;
 import com.wifi.wifiscanner.dto.Device;
 import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.dto.StubReport;
-import com.wifi.wifiscanner.presentation.activity.MainActivity;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -27,7 +26,6 @@ public class ScanService extends Service {
 
   private WifiManager wifiManager;
   private Report report;
-  private WiFiBinder wiFiBinder;
   private TimerTask task;
   private Timer timer = new Timer();
 
@@ -36,9 +34,8 @@ public class ScanService extends Service {
   public IBinder onBind(Intent intent) {
     Log.d(SCAN_SERVICE_TAG, " onStartCommand");
     this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-    wiFiBinder = new WiFiBinder(this);
     this.scan();
-    return wiFiBinder;
+    return new ScanServiceBinder(this);
   }
 
   @Override
@@ -51,6 +48,7 @@ public class ScanService extends Service {
   public int onStartCommand(Intent intent, int flags, int startId) {
     Log.d(SCAN_SERVICE_TAG, " onStartCommand");
     this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
+    this.scan();
     return super.onStartCommand(intent, flags, startId);
   }
 

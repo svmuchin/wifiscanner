@@ -3,7 +3,6 @@ package com.wifi.wifiscanner.presentation.activity;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -16,10 +15,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.wifi.wifiscanner.HistoryAsyncTask;
 import com.wifi.wifiscanner.R;
-import com.wifi.wifiscanner.ScanService;
-import com.wifi.wifiscanner.WiFiServiceConnection;
+import com.wifi.wifiscanner.services.history.HistoryAsyncTask;
+import com.wifi.wifiscanner.services.history.HistoryService;
+import com.wifi.wifiscanner.services.history.HistoryServiceConnection;
+import com.wifi.wifiscanner.services.scan.ScanService;
+import com.wifi.wifiscanner.services.scan.ScanServiceConnection;
 import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.presentation.Divider;
 import com.wifi.wifiscanner.presentation.network.NetworksAdapter;
@@ -33,8 +34,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
   private RecyclerView networksRecycler;
   private Report report = new Report();
-  private WiFiServiceConnection conn;
+  private ScanServiceConnection scanConn;
+  private HistoryServiceConnection historyConn;
   public RestClient restClient;
+
   // TODO: убрать после реализации авторизации
   private static final String EMAIL = "mail@mail.com";
   private static final String PASSWORD = "UNQHezQI2mMjMlsnJyXP";
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    this.restClient = new RestClient(this);
     this.setContentView(R.layout.activity_main);
     this.setSupportActionBar((Toolbar) this.findViewById(R.id.main_toolbar));
     this.networksRecycler = this.findViewById(R.id.networks_recycler);
@@ -54,9 +58,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     historyButton.setOnClickListener(this);
     saveButton.setOnClickListener(this);
     sendButton.setOnClickListener(this);
-    Intent serviceIntent = new Intent(this, ScanService.class);
-    conn = new WiFiServiceConnection();
-    bindService(serviceIntent, conn, BIND_AUTO_CREATE);
+    Intent scanServiceIntent = new Intent(this, ScanService.class);
+    scanConn = new ScanServiceConnection();
+    bindService(scanServiceIntent, scanConn, BIND_AUTO_CREATE);
+    Intent historyServiceIntent = new Intent(this, HistoryService.class);
+    historyConn = new HistoryServiceConnection();
+    bindService(historyServiceIntent, historyConn, BIND_AUTO_CREATE);
     this.report = this.getReport();
     this.setAdapter(this.report);
     if (!this.restClient.isAuthorized()) {
@@ -109,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.startActivity(historyIntent);
         break;
       case R.id.main_button_save:
-        SimpleStorage.getStorage().save(this.report);
+        this.saveReport();
         Toast.makeText(this, "Отчёт сохранён.", Toast.LENGTH_SHORT).show();
         break;
       case R.id.main_button_send:
@@ -117,6 +124,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Toast.makeText(this, "Отчёт отправлен.", Toast.LENGTH_SHORT).show();
         break;
     }
+  }
+
+  private void saveReport() {
+    HistoryAsyncTask asyncTask = new HistoryAsyncTask();
+    asyncTask.insert(getApplicationContext(), this.report);
+//    historyConn.getService().insert(report);
+    SimpleStorage.getStorage().save(this.report);
   }
 
   public void scan() {
@@ -138,9 +152,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   }
 
   private void serviceScan() {
-    HistoryAsyncTask asyncTask = new HistoryAsyncTask();
-    asyncTask.execute(this);
-    this.report = conn.getService().scan();
+    this.report = scanConn.getService().scan();
     this.setAdapter(this.report);
   }
 }

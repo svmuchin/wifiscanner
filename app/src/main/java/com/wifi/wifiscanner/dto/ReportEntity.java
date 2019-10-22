@@ -3,31 +3,27 @@ package com.wifi.wifiscanner.dto;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.arch.persistence.room.TypeConverters;
-import android.support.annotation.NonNull;
 
 import com.wifi.wifiscanner.da.ReportConverter;
 
 @Entity
 public class ReportEntity {
 
-  @PrimaryKey()
-  @NonNull
+  @PrimaryKey(autoGenerate = true)
   public int id;
 
-  @TypeConverters({ReportConverter.class, })
+  @TypeConverters({ReportConverter.class,})
   public Report report;
 
-  public ReportEntity(int id, Report report) {
-    this.id = id;
+  public ReportEntity(Report report) {
     this.report = report;
   }
 
-  @NonNull
   public int getId() {
     return id;
   }
 
-  public void setId(@NonNull int id) {
+  public void setId(int id) {
     this.id = id;
   }
 
