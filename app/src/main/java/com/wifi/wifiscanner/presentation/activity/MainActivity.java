@@ -1,4 +1,4 @@
-package com.wifi.wifiscanner;
+package com.wifi.wifiscanner.presentation.activity;
 
 import android.Manifest;
 import android.content.Context;
@@ -20,18 +20,34 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.wifi.wifiscanner.R;
+import com.wifi.wifiscanner.dto.Device;
+import com.wifi.wifiscanner.dto.Report;
+import com.wifi.wifiscanner.dto.StubReport;
+import com.wifi.wifiscanner.presentation.Divider;
+import com.wifi.wifiscanner.presentation.network.NetworksAdapter;
+import com.wifi.wifiscanner.rest.RestClient;
+import com.wifi.wifiscanner.storage.SimpleStorage;
+import com.wifi.wifiscanner.util.Constants;
+
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    // TODO: убрать после реализации авторизации
+    private static final String EMAIL = "mail@mail.com";
+    private static final String PASSWORD = "UNQHezQI2mMjMlsnJyXP";
+
     private WifiManager wifiManager;
     private RecyclerView networksRecycler;
     private Report report = new Report();
+    public RestClient restClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_main);
+        this.restClient = new RestClient(this);
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.main_toolbar));
         this.networksRecycler = this.findViewById(R.id.networks_recycler);
         this.networksRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
@@ -43,6 +59,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         historyButton.setOnClickListener(this);
         saveButton.setOnClickListener(this);
         sendButton.setOnClickListener(this);
+        if (!this.restClient.isAuthorized()) {
+            this.restClient.signUp(EMAIL, PASSWORD);
+        }
     }
 
     @Override
@@ -85,11 +104,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case R.id.main_button_save:
                 SimpleStorage.getStorage().save(this.report);
-                Toast.makeText(getApplicationContext(), "Отчёт сохранён.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Отчёт сохранён.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.main_button_send:
-                // TODO: Реализовать вызов отправки
-                Toast.makeText(getApplicationContext(), "Отчёт отправлен.", Toast.LENGTH_SHORT).show();
+                this.restClient.sendReport(this.report);
+                Toast.makeText(this, "Отчёт отправлен.", Toast.LENGTH_SHORT).show();
                 break;
         }
     }
@@ -103,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             this.report = new StubReport();
             this.networksRecycler.setAdapter(new NetworksAdapter(this.report));
             // TODO: для тестирования end
-            Log.d("NET_SCAN", report.toString());
+            Log.d(Constants.NET_SCAN_TAG, report.toString());
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }

@@ -1,4 +1,4 @@
-package com.wifi.wifiscanner;
+package com.wifi.wifiscanner.presentation;
 
 import android.content.Context;
 import android.content.res.TypedArray;

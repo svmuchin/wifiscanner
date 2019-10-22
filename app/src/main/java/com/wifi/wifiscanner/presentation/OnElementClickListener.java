@@ -1,4 +1,4 @@
-package com.wifi.wifiscanner;
+package com.wifi.wifiscanner.presentation;
 
 public interface OnElementClickListener {
 

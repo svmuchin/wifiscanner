@@ -1,0 +1,91 @@
+{
+  "calendar": {
+    "year": 2019,
+    "month": 9,
+    "dayOfMonth": 20,
+    "hourOfDay": 18,
+    "minute": 29,
+    "second": 4
+  },
+  "device": {
+    "ip": "0.0.0.0",
+    "mac": "MAC ADDRESS",
+    "model": "AMAZINGABLE DEVICE",
+    "softVersion": "1kk.2kk"
+  },
+  "id": "0f4e104a-8534-4df8-b907-30dc3e7654fa",
+  "results": [
+    {
+      "BSSID": "172.173.23.42",
+      "RSSI": 1,
+      "SSID": "BAC9I_WIFI",
+      "channel": 1
+    },
+    {
+      "BSSID": "172.11.228.19",
+      "RSSI": 1,
+      "SSID": "PIVNUSHKA_FREE_WIFI",
+      "channel": 1
+    },
+    {
+      "BSSID": "172.11.228.19",
+      "RSSI": 2,
+      "SSID": "PIVNUSHKA_FREE_WIFI",
+      "channel": 2
+    },
+    {
+      "BSSID": "172.11.228.19",
+      "RSSI": 3,
+      "SSID": "PIVNUSHKA_FREE_WIFI",
+      "channel": 3
+    },
+    {
+      "BSSID": "172.11.228.19",
+      "RSSI": 4,
+      "SSID": "PIVNUSHKA_FREE_WIFI",
+      "channel": 4
+    },
+    {
+      "BSSID": "172.11.228.19",
+      "RSSI": 5,
+      "SSID": "PIVNUSHKA_FREE_WIFI",
+      "channel": 5
+    },
+    {
+      "BSSID": "172.11.228.19",
+      "RSSI": 6,
+      "SSID": "PIVNUSHKA_FREE_WIFI",
+      "channel": 6
+    },
+    {
+      "BSSID": "172.173.23.42",
+      "RSSI": 2,
+      "SSID": "BAC9I_WIFI",
+      "channel": 2
+    },
+    {
+      "BSSID": "172.173.23.42",
+      "RSSI": 3,
+      "SSID": "BAC9I_WIFI",
+      "channel": 3
+    },
+    {
+      "BSSID": "172.173.23.42",
+      "RSSI": 4,
+      "SSID": "BAC9I_WIFI",
+      "channel": 4
+    },
+    {
+      "BSSID": "172.173.23.42",
+      "RSSI": 5,
+      "SSID": "BAC9I_WIFI",
+      "channel": 5
+    },
+    {
+      "BSSID": "00:0e:8f:d3:5b:e4",
+      "RSSI": 6,
+      "SSID": "MIKSHIN_FOREVA",
+      "channel": 6
+    }
+  ]
+}

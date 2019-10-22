@@ -1,4 +1,6 @@
-package com.wifi.wifiscanner;
+package com.wifi.wifiscanner.storage;
+
+import com.wifi.wifiscanner.dto.Report;
 
 import java.util.ArrayList;
 import java.util.Iterator;

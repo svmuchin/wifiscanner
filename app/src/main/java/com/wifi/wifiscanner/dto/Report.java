@@ -1,6 +1,8 @@
-package com.wifi.wifiscanner;
+package com.wifi.wifiscanner.dto;
 
 import android.net.wifi.ScanResult;
+
+import com.wifi.wifiscanner.util.Serializer;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -67,6 +69,6 @@ public class Report {
 
   @Override
   public String toString() {
-    return Serializer.Serialize(this);
+    return Serializer.serialize(this);
   }
 }

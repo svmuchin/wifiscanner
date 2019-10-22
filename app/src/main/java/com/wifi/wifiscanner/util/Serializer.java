@@ -1,17 +1,17 @@
-package com.wifi.wifiscanner;
+package com.wifi.wifiscanner.util;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 public class Serializer {
 
-  public static String Serialize(Object o) {
+  public static String serialize(Object o) {
     GsonBuilder gsonBuilder = new GsonBuilder();
     Gson gson = gsonBuilder.create();
     return gson.toJson(o);
   }
 
-  public static <T> T Deserialize(String str, Class<T> clazz) {
+  public static <T> T deserialize(String str, Class<T> clazz) {
     GsonBuilder gsonBuilder = new GsonBuilder();
     Gson gson = gsonBuilder.create();
     return gson.fromJson(str, clazz);
