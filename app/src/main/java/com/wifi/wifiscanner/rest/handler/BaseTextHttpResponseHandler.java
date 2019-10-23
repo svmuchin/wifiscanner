@@ -10,7 +10,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class BaseTextHttpResponseHandler extends TextHttpResponseHandler {
 
-    private String tag = "HTTP_REQUEST";
+    private String tag = Constants.BASE_HTTP_TAG;
 
     public BaseTextHttpResponseHandler() {
         super(Constants.UTF_8);

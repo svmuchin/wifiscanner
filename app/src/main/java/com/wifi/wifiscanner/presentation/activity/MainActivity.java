@@ -32,127 +32,134 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-  private RecyclerView networksRecycler;
-  private Report report = new Report();
-  private ScanServiceConnection scanConn;
-  private HistoryServiceConnection historyConn;
-  public RestClient restClient;
+    private RecyclerView networksRecycler;
+    private Report report = new Report();
+    private ScanServiceConnection scanConn = new ScanServiceConnection();
+    private HistoryServiceConnection historyConn = new HistoryServiceConnection();
+    public RestClient restClient;
 
-  // TODO: убрать после реализации авторизации
-  private static final String EMAIL = "mail@mail.com";
-  private static final String PASSWORD = "UNQHezQI2mMjMlsnJyXP";
+    // TODO: убрать после реализации авторизации
+    private static final String EMAIL = "mail@mail.com";
+    private static final String PASSWORD = "UNQHezQI2mMjMlsnJyXP";
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    this.restClient = new RestClient(this);
-    this.setContentView(R.layout.activity_main);
-    this.setSupportActionBar((Toolbar) this.findViewById(R.id.main_toolbar));
-    this.networksRecycler = this.findViewById(R.id.networks_recycler);
-    this.networksRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
-    Button scanButton = this.findViewById(R.id.main_button_scan);
-    Button historyButton = this.findViewById(R.id.main_button_history);
-    Button saveButton = this.findViewById(R.id.main_button_save);
-    Button sendButton = this.findViewById(R.id.main_button_send);
-    scanButton.setOnClickListener(this);
-    historyButton.setOnClickListener(this);
-    saveButton.setOnClickListener(this);
-    sendButton.setOnClickListener(this);
-    Intent scanServiceIntent = new Intent(this, ScanService.class);
-    scanConn = new ScanServiceConnection();
-    bindService(scanServiceIntent, scanConn, BIND_AUTO_CREATE);
-    Intent historyServiceIntent = new Intent(this, HistoryService.class);
-    historyConn = new HistoryServiceConnection();
-    bindService(historyServiceIntent, historyConn, BIND_AUTO_CREATE);
-    this.report = this.getReport();
-    this.setAdapter(this.report);
-    if (!this.restClient.isAuthorized()) {
-      this.restClient.signUp(EMAIL, PASSWORD);
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.restClient = new RestClient(this);
+        this.setContentView(R.layout.activity_main);
+        this.setSupportActionBar((Toolbar) this.findViewById(R.id.main_toolbar));
+        this.networksRecycler = this.findViewById(R.id.networks_recycler);
+        this.networksRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
+        this.<Button>findViewById(R.id.main_button_scan).setOnClickListener(this);
+        this.<Button>findViewById(R.id.main_button_history).setOnClickListener(this);
+        this.<Button>findViewById(R.id.main_button_save).setOnClickListener(this);
+        this.<Button>findViewById(R.id.main_button_send).setOnClickListener(this);
+        Intent scanServiceIntent = new Intent(this, ScanService.class);
+        bindService(scanServiceIntent, scanConn, BIND_AUTO_CREATE);
+        Intent historyServiceIntent = new Intent(this, HistoryService.class);
+        bindService(historyServiceIntent, historyConn, BIND_AUTO_CREATE);
+        // this.report = this.getReport();
+        this.setAdapter(this.report);
+
+        if (!this.restClient.isAuthorized()) {
+            this.restClient.signIn(EMAIL, PASSWORD);
+        }
     }
-  }
 
-  @Override
-  protected void onResume() {
-    super.onResume();
-    this.report = this.getReport();
-    this.setAdapter(this.report);
-  }
-
-  @Override
-  protected void onDestroy() {
-    super.onDestroy();
-    stopService(new Intent(this, ScanService.class));
-  }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    this.getMenuInflater().inflate(R.menu.menu_main, menu);
-    return true;
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    // Handle action bar item clicks here. The action bar will
-    // automatically handle clicks on the Home/Up button, so long
-    // as you specify a parent activity in AndroidManifest.xml.
-    int id = item.getItemId();
-
-    //noinspection SimplifiableIfStatement
-    if (id == R.id.action_settings) {
-      return true;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // this.report = this.getReport();
+        this.setAdapter(this.report);
     }
-    return super.onOptionsItemSelected(item);
-  }
 
-  @Override
-  public void onClick(View v) {
-    switch (v.getId()) {
-      case R.id.main_button_scan:
-        this.scan();
-        break;
-      case R.id.main_button_history:
-        Intent historyIntent = new Intent(this, HistoryActivity.class);
-        this.startActivity(historyIntent);
-        break;
-      case R.id.main_button_save:
-        this.saveReport();
-        Toast.makeText(this, "Отчёт сохранён.", Toast.LENGTH_SHORT).show();
-        break;
-      case R.id.main_button_send:
-        this.restClient.sendReport(this.report);
-        Toast.makeText(this, "Отчёт отправлен.", Toast.LENGTH_SHORT).show();
-        break;
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        stopService(new Intent(this, ScanService.class));
     }
-  }
 
-  private void saveReport() {
-    HistoryAsyncTask asyncTask = new HistoryAsyncTask();
-    asyncTask.insert(getApplicationContext(), this.report);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        this.getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.main_button_scan:
+                this.scan();
+                break;
+            case R.id.main_button_history:
+                Intent historyIntent = new Intent(this, HistoryActivity.class);
+                this.startActivity(historyIntent);
+                break;
+            case R.id.main_button_save:
+                if (this.hasReport(report)) {
+                    this.saveReport();
+                    Toast.makeText(this, "Отчёт сохранён.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Отчёт пуст.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.main_button_send:
+                if (this.hasReport(report)) {
+                    this.restClient.sendReport(this.report);
+                    Toast.makeText(this, "Отчёт отправлен.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Отчёт пуст.", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
+
+    private void saveReport() {
+        HistoryAsyncTask asyncTask = new HistoryAsyncTask();
+        asyncTask.insert(getApplicationContext(), this.report);
 //    historyConn.getService().insert(report);
-    SimpleStorage.getStorage().save(this.report);
-  }
-
-  public void scan() {
-    if (ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-      this.serviceScan();
-    } else {
-      ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        SimpleStorage.getStorage().save(this.report);
     }
-  }
 
-  private Report getReport() {
-    return Serializer.deserialize(getIntent().getStringExtra(ScanService.REPORT_DATA), Report.class);
-  }
-
-  private void setAdapter(Report report) {
-    if (report != null && !report.getAccessPoints().isEmpty()) {
-      this.networksRecycler.setAdapter(new NetworksAdapter(report));
+    public void scan() {
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            this.serviceScan();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
+        }
     }
-  }
 
-  private void serviceScan() {
-    this.report = scanConn.getService().scan();
-    this.setAdapter(this.report);
-  }
+    private Report getReport() {
+        return Serializer.deserialize(getIntent().getStringExtra(ScanService.REPORT_DATA), Report.class);
+    }
+
+    private void setAdapter(Report report) {
+        if (this.hasReport(report)) {
+            this.networksRecycler.setAdapter(new NetworksAdapter(report));
+        }
+    }
+
+    private boolean hasReport(Report report) {
+        return report != null && !report.getAccessPoints().isEmpty();
+    }
+
+    private void serviceScan() {
+        this.report = this.scanConn.getService().scan();
+        this.setAdapter(this.report);
+    }
 }

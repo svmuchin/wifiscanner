@@ -17,8 +17,8 @@ public interface ReportDao {
   @Query("SELECT * from reportentity")
   List<ReportEntity> getAll();
 
-  @Query("SELECT * from reportentity where id = id")
-  ReportEntity getById();
+  @Query("SELECT * from reportentity where id = :reportId")
+  ReportEntity getById(long reportId);
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
   void insert(ReportEntity report);

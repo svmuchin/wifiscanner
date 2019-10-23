@@ -7,4 +7,5 @@ public class Constants {
     public static final String SIGN_IN_TAG = "SIGN_IN";
     public static final String SEND_REPORT_TAG = "SEND_REPORT";
     public static final String NET_SCAN_TAG = "NET_SCAN";
+    public static final String SCAN_SERVICE_TAG = "SCAN_SERVICE";
 }

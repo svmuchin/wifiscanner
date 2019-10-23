@@ -15,7 +15,7 @@ public class Device {
   public String softVersion;
 
   /**
-   * MAC адресс
+   * MAC адрес
    */
   public String mac;
 

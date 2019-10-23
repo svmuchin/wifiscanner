@@ -20,10 +20,7 @@ public class Report {
   private List<AccessPoint> accessPoints;
 
   public Report() {
-    this.id = UUID.randomUUID().toString();
-    this.calendar = Calendar.getInstance();
-    this.device = new Device();
-    this.accessPoints = new ArrayList<>();
+    this(new ArrayList<ScanResult>(), new Device());
   }
 
   public Report(List<ScanResult> scanResults, Device device) {

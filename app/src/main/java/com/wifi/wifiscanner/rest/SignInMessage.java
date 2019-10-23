@@ -1,11 +1,11 @@
 package com.wifi.wifiscanner.rest;
 
-public class SignUpMessage {
+public class SignInMessage {
 
     private String email;
     private String password;
 
-    public SignUpMessage(String email, String password) {
+    public SignInMessage(String email, String password) {
         this.email = email;
         this.password = password;
     }

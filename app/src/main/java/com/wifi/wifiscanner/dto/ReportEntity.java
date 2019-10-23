@@ -10,20 +10,20 @@ import com.wifi.wifiscanner.da.ReportConverter;
 public class ReportEntity {
 
   @PrimaryKey(autoGenerate = true)
-  public int id;
+  public long id;
 
-  @TypeConverters({ReportConverter.class,})
+  @TypeConverters({ReportConverter.class})
   public Report report;
 
   public ReportEntity(Report report) {
     this.report = report;
   }
 
-  public int getId() {
+  public long getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(long id) {
     this.id = id;
   }
 

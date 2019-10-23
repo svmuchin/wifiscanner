@@ -17,8 +17,8 @@ public class RestClient {
 
     private static final String BASE_URL = "https://wifi-scanner-server.herokuapp.com/";
     private static final String APPLICATION_JSON = "application/json";
-    private static final String SIGN_UP_URL = "sign-up/";
-    private static final String SEND_REPORT_URL = "send-report/";
+    private static final String SIGN_UP_URL = BASE_URL + "sign-up/";
+    private static final String SEND_REPORT_URL = BASE_URL + "send-report/";
     private static final String AUTH_TOKEN_NAME = "Authorization";
 
     private AsyncHttpClient client;
@@ -31,9 +31,9 @@ public class RestClient {
         this.authorizationStorage = new AuthorizationStorage(context);
     }
 
-    public void signUp(String email, String password) {
+    public void signIn(String email, String password) {
         this.client.post(this.context,
-                BASE_URL + SIGN_UP_URL,
+                SIGN_UP_URL,
                 null,
                 this.getSignUpBody(email, password),
                 APPLICATION_JSON,
@@ -42,7 +42,7 @@ public class RestClient {
 
     public void sendReport(Report report) {
         this.client.post(this.context,
-                BASE_URL + SEND_REPORT_URL,
+                SEND_REPORT_URL,
                 this.getAuthHeaders(),
                 this.getSendReportBody(report),
                 APPLICATION_JSON,
@@ -54,7 +54,7 @@ public class RestClient {
     }
 
     private StringEntity getSignUpBody(String email, String password) {
-        return new StringEntity(Serializer.serialize(new SignUpMessage(email, password)), Constants.UTF_8);
+        return new StringEntity(Serializer.serialize(new SignInMessage(email, password)), Constants.UTF_8);
     }
 
     private StringEntity getSendReportBody(Report report) {

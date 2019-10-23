@@ -4,7 +4,8 @@ import android.os.Binder;
 import android.util.Log;
 
 class ScanServiceBinder extends Binder {
-  ScanService service;
+
+  private ScanService service;
 
   public ScanServiceBinder(ScanService service) {
     this.service = service;

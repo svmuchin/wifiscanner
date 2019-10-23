@@ -3,8 +3,6 @@ package com.wifi.wifiscanner.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.List;
-
 public class Serializer {
 
   public static String serialize(Object o) {

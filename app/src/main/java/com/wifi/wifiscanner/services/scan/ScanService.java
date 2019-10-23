@@ -13,6 +13,7 @@ import android.util.Log;
 import com.wifi.wifiscanner.dto.Device;
 import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.dto.StubReport;
+import com.wifi.wifiscanner.util.Constants;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -21,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 
 public class ScanService extends Service {
 
-  public static final String SCAN_SERVICE_TAG = "SCAN_SERVICE";
   public static final String REPORT_DATA = "REPORT_DATA";
 
   private WifiManager wifiManager;
@@ -32,7 +32,7 @@ public class ScanService extends Service {
   @Nullable
   @Override
   public IBinder onBind(Intent intent) {
-    Log.d(SCAN_SERVICE_TAG, " onStartCommand");
+    Log.d(Constants.SCAN_SERVICE_TAG, " onStartCommand");
     this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     this.scan();
     return new ScanServiceBinder(this);
@@ -40,13 +40,13 @@ public class ScanService extends Service {
 
   @Override
   public void onCreate() {
-    Log.d(SCAN_SERVICE_TAG, " onCreate");
+    Log.d(Constants.SCAN_SERVICE_TAG, " onCreate");
     super.onCreate();
   }
 
   @Override
   public int onStartCommand(Intent intent, int flags, int startId) {
-    Log.d(SCAN_SERVICE_TAG, " onStartCommand");
+    Log.d(Constants.SCAN_SERVICE_TAG, " onStartCommand");
     this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
     this.scan();
     return super.onStartCommand(intent, flags, startId);
@@ -54,7 +54,7 @@ public class ScanService extends Service {
 
   @Override
   public void onDestroy() {
-    Log.d(SCAN_SERVICE_TAG, " onDestroy");
+    Log.d(Constants.SCAN_SERVICE_TAG, " onDestroy");
     super.onDestroy();
   }
 

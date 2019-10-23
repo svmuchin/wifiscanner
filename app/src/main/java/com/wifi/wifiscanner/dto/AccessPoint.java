@@ -8,7 +8,7 @@ public class AccessPoint {
   public String SSID;
 
   /**
-   * Адресс
+   * Адрес
    */
   public String BSSID;
 

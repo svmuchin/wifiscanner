@@ -14,6 +14,9 @@ import com.wifi.wifiscanner.dto.Report;
 
 import java.util.List;
 
+/**
+ * Очевидно, что это стандартная байда, цепляющаяся к стандартному рекуклер вью.
+ */
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryItemHolder> implements OnElementClickListener {
 
     private List<Report> reports;
