@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         Intent historyServiceIntent = new Intent(this, HistoryService.class);
         bindService(historyServiceIntent, historyConn, BIND_AUTO_CREATE);
         this.setAdapter(this.report);
-        this.restClient.signIn(EMAIL, PASSWORD);
     }
 
     @Override

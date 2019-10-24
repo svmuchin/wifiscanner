@@ -37,7 +37,6 @@
 
         <service android:name=".services.scan.ScanService" />
         <service android:name=".services.history.HistoryService" />
-        <service android:name=".services.AuthorisationService"/>
     </application>
 
 </manifest>
