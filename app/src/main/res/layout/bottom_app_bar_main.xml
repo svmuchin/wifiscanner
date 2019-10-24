@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".presentation.activity.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <android.support.design.bottomappbar.BottomAppBar
@@ -14,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:backgroundTint="@color/colorPrimary"
-        android:padding="8dp"
+        android:padding="4dp"
         app:fabAlignmentMode="end">
 
         <ImageButton
@@ -50,8 +49,8 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/main_button_scan_text"
         android:onClick="handleOnScan"
-        android:src="@drawable/ic_perm_scan_wifi_24px"
-        app:maxImageSize="36dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/ic_perm_scan_wifi_white_24dp"
         app:layout_anchor="@id/bottomAppBar" />
 
 </android.support.design.widget.CoordinatorLayout>
