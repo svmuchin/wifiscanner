@@ -18,4 +18,13 @@
     <string name="history_item_create_time_text">Время:</string>
     <string name="show_button_send_text">Отправить</string>
     <string name="start">start</string>
+    <string name="title_activity_login">Вход</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Здравствуйте !"</string>
+    <string name="invalid_username">Не верный логин</string>
+    <string name="invalid_password">Неверный пароль</string>
+    <string name="login_failed">"Ошибка входа"</string>
 </resources>

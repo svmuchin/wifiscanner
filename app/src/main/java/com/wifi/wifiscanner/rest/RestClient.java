@@ -15,10 +15,10 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class RestClient {
 
-    private static final String BASE_URL = "https://wifi-scanner-server.herokuapp.com/";
+    private static final String BASE_URL = "http://172.30.14.77:3000/";
     private static final String APPLICATION_JSON = "application/json";
-    private static final String SIGN_UP_URL = BASE_URL + "sign-up/";
-    private static final String SEND_REPORT_URL = BASE_URL + "send-report/";
+    private static final String SIGN_UP_URL = BASE_URL + "sign-in/";
+    private static final String SEND_REPORT_URL = BASE_URL + "reports/";
     private static final String AUTH_TOKEN_NAME = "Authorization";
 
     private AsyncHttpClient client;
