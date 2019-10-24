@@ -55,8 +55,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         this.setContentView(R.layout.activity_main);
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.main_toolbar));
         this.initRefreshLayout();
-
+        this.initControlsState();
         this.networksRecycler = this.findViewById(R.id.networks_recycler);
+
         this.networksRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
         this.mainHandler = new MainHandler(networksRecycler, this);
         this.mainMessenger = new Messenger(mainHandler);
@@ -65,6 +66,15 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         Intent historyServiceIntent = new Intent(this, HistoryService.class);
         bindService(historyServiceIntent, historyConn, BIND_AUTO_CREATE);
         this.setAdapter(this.report);
+    }
+
+    private void initControlsState() {
+        this.findViewById(R.id.main_button_send).setEnabled(false);
+        this.findViewById(R.id.main_button_save).setEnabled(false);
+        // ToDO: раскомментировать после починки истории
+//        if (DBStorage.getStorage(getApplicationContext()).getAll().isEmpty()) {
+//        this.findViewById(R.id.main_button_history).setEnabled(false);
+//        }
     }
 
     @Override
@@ -89,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     public void handleOnSave(View v) {
         if (this.hasReport(report)) {
             this.saveReport();
+            this.findViewById(R.id.main_button_history).setEnabled(true);
             Toast.makeText(this, "Отчёт сохранён.", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Отчёт пуст.", Toast.LENGTH_SHORT).show();
@@ -98,6 +109,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     public void handleOnSend(View v) {
         if (this.hasReport(report)) {
             this.restClient.sendReport(this.report);
+            findViewById(R.id.main_button_send).setEnabled(false);
             Toast.makeText(this, "Отчёт отправлен.", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Отчёт пуст.", Toast.LENGTH_SHORT).show();
@@ -106,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void saveReport() {
         DBStorage.getStorage(getApplicationContext()).save(this.report);
+        findViewById(R.id.main_button_save).setEnabled(false);
     }
 
     public void scan() {
@@ -130,6 +143,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void serviceScan() {
         this.mainHandler.invalidate();
+        findViewById(R.id.main_button_save).setEnabled(true);
+        findViewById(R.id.main_button_send).setEnabled(true);
         Intent scanServiceIntent = new Intent(this, ScanService.class);
         bindService(scanServiceIntent, scanConn, BIND_AUTO_CREATE);
     }
@@ -173,5 +188,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     public void setReport(Report report) {
         this.report = report;
+    }
+
+    public void handleOnTest(View view) {
+        Intent intent = new Intent(this, TestActivity.class);
+        this.startActivity(intent);
     }
 }
