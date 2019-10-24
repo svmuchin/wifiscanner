@@ -162,8 +162,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         this.refreshLayout.postDelayed(new Runnable() {
             @Override
             public void run() {
-                refreshLayout.setRefreshing(false);
                 scan();
+                refreshLayout.setRefreshing(false);
             }
         }, 1000);
     }
