@@ -15,6 +15,10 @@ public class NetworksAdapter extends RecyclerView.Adapter<NetworkHolder> {
 
     private Report report;
 
+    public void setReport(Report report) {
+        this.report = report;
+    }
+
     public NetworksAdapter(Report report) {
         this.report = report;
     }
