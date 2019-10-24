@@ -16,12 +16,13 @@ import android.util.Log;
 
 import com.wifi.wifiscanner.dto.Device;
 import com.wifi.wifiscanner.dto.Report;
-import com.wifi.wifiscanner.dto.StubReport;
 import com.wifi.wifiscanner.services.handler.ScanHandler;
 import com.wifi.wifiscanner.util.Constants;
 import com.wifi.wifiscanner.util.Serializer;
 
+import java.net.NetworkInterface;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -38,8 +39,6 @@ public class ScanService extends Service {
     private List<Messenger> clientMessengers = new ArrayList<>();
     private final ScanHandler scanHandler = new ScanHandler(clientMessengers);
     private Messenger scanServiceMessenger = new Messenger(scanHandler);
-    private Thread thread;
-
 
     @Nullable
     @Override
@@ -100,11 +99,32 @@ public class ScanService extends Service {
 
             private Device createDevice(WifiInfo wifiInfo) {
                 Device device = new Device();
-                device.setMac(wifiInfo.getMacAddress());
+                device.setMac(this.getMac());
                 device.setIp(wifiInfo.getIpAddress());
                 device.setModel(Build.MODEL);
                 device.setSoftVersion(Build.VERSION.RELEASE);
                 return device;
+            }
+
+            private String getMac() {
+                try {
+                    List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
+                    for (NetworkInterface intf : interfaces) {
+                        if (!intf.getName().equalsIgnoreCase("wlan0"))
+                            continue;
+                        byte[] mac = intf.getHardwareAddress();
+                        if (mac == null) {
+                            return "";
+                        }
+                        StringBuilder buf = new StringBuilder();
+                        for (byte aMac : mac) buf.append(String.format("%02X:", aMac));
+                        if (buf.length() > 0) buf.deleteCharAt(buf.length() - 1);
+                        return buf.toString();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return "";
             }
         };
         timer.schedule(task, 0, 5000);
