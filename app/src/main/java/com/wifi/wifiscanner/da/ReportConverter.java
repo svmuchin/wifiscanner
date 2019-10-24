@@ -9,7 +9,7 @@ public class ReportConverter {
 
   @TypeConverter
   public String fromReport(Report report) {
-    return Serializer.serialize(report);
+    return Serializer.reportSerialize(report);
   }
 
   @TypeConverter
