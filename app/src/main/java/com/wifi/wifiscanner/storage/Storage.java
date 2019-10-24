@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface Storage {
 
-    Report get(String key);
+    Report get(long id);
 
     List<Report> getAll();
 

@@ -77,6 +77,6 @@ public class Report {
 
   @Override
   public String toString() {
-    return Serializer.serialize(this);
+    return Serializer.reportSerialize(this);
   }
 }

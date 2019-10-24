@@ -4,7 +4,7 @@
     android:viewportWidth="36"
     android:viewportHeight="36">
     <group
-        android:scaleX="1.2"
+        android:scaleX="@android:integer/status_bar_notification_info_maxnum"
         android:scaleY="1.2">
         <path
             android:fillColor="#FFFFFF"

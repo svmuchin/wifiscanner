@@ -11,7 +11,7 @@ public class Serializer {
     private static final GsonBuilder REPORT_BUILDER = new GsonBuilder().registerTypeAdapter(GregorianCalendar.class, new CalendarAdapter());
     private static final GsonBuilder DEFAULT_BUILDER = new GsonBuilder();
 
-    public static String serialize(Report o) {
+    public static String reportSerialize(Report o) {
         return REPORT_BUILDER.create().toJson(o);
     }
 
