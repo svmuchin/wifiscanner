@@ -18,11 +18,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.wifi.wifiscanner.presentation.activity.data.AuthorisationResult;
-import com.wifi.wifiscanner.rest.AuthorizationStorage;
-
 import com.wifi.wifiscanner.R;
 import com.wifi.wifiscanner.presentation.activity.MainActivity;
+import com.wifi.wifiscanner.presentation.activity.data.AuthorisationResult;
+import com.wifi.wifiscanner.rest.AuthorizationStorage;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -35,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         this.authorizationStorage = new AuthorizationStorage(this);
         // TODO: чтобы всегда попадать на авторизацию раскоментируй строчку ниже
-        // this.authorizationStorage.logout();
+        this.authorizationStorage.logout();
         if (this.authorizationStorage.isAuthorized()) {
             this.toMainActivity();
         }
@@ -67,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onChanged(@Nullable AuthorisationResult authorisationResult) {
                 if (authorisationResult == null) {
+                    toggleControlsState(loginButton, usernameEditText, passwordEditText, true);
                     return;
                 }
                 loadingProgressBar.setVisibility(View.GONE);
@@ -75,6 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                     toMainActivity();
                 } else {
                     showLoginFailed(R.string.login_failed);
+                    toggleControlsState(loginButton, usernameEditText, passwordEditText, true);
                 }
             }
         });
@@ -113,11 +114,19 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                toggleControlsState(loginButton, usernameEditText, passwordEditText, false);
                 loadingProgressBar.setVisibility(View.VISIBLE);
                 loginViewModel.login(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
+
             }
         });
+    }
+
+    private void toggleControlsState(Button loginButton, EditText usernameEditText, EditText passwordEditText, boolean b) {
+        loginButton.setEnabled(b);
+        usernameEditText.setEnabled(b);
+        passwordEditText.setEnabled(b);
     }
 
     private void toMainActivity() {
