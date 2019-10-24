@@ -21,15 +21,13 @@ import cz.msebera.android.httpclient.Header;
  */
 public class SignInTextHttpResponseHandler extends BaseTextHttpResponseHandler {
 
-    public static final int AUTHORISATION_RESULT = 12345;
-    public static final String AUTHORISATION_RESULT_CODE = "AUTHORISATION_RESULT_CODE";
     private AuthorizationStorage authorizationStorage;
-    private Messenger messenger;
+    private OnAuthorisationResultListener listener;
 
-    public SignInTextHttpResponseHandler(Context context, Messenger messenger) {
+    public SignInTextHttpResponseHandler(Context context, OnAuthorisationResultListener listener) {
         super(Constants.SIGN_IN_TAG);
         this.authorizationStorage = new AuthorizationStorage(context);
-        this.messenger = messenger;
+        this.listener = listener;
     }
 
     @Override
@@ -38,25 +36,13 @@ public class SignInTextHttpResponseHandler extends BaseTextHttpResponseHandler {
         if (responseString != null) {
             SignInAnswer authToken = Serializer.deserialize(responseString, SignInAnswer.class);
             this.authorizationStorage.put(authToken.getToken());
-            this.sendMessage(AuthorisationResult.success());
+            this.listener.onAuthorisationResult(AuthorisationResult.success());
         }
     }
 
     @Override
     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
         super.onFailure(statusCode, headers, responseString, throwable);
-        this.sendMessage(AuthorisationResult.error());
-    }
-
-    private void sendMessage(AuthorisationResult authorisationResult) {
-        Message replyMsg = Message.obtain(null, AUTHORISATION_RESULT);
-        Bundle data = new Bundle();
-        data.putString(AUTHORISATION_RESULT_CODE, authorisationResult.getCode());
-        replyMsg.setData(data);
-        try {
-            this.messenger.send(replyMsg);
-        } catch (RemoteException ex) {
-            Log.e(Constants.AUTHORISATION_TAG, ex.getMessage(), ex);
-        }
+        this.listener.onAuthorisationResult(AuthorisationResult.error());
     }
 }

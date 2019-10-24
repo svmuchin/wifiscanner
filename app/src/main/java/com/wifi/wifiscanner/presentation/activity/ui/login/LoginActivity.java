@@ -1,5 +1,6 @@
 package com.wifi.wifiscanner.presentation.activity.ui.login;
 
+import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
@@ -34,7 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         this.authorizationStorage = new AuthorizationStorage(this);
         // TODO: чтобы всегда попадать на авторизацию раскоментируй строчку ниже
-//        this.authorizationStorage.logout();
+        // this.authorizationStorage.logout();
         if (this.authorizationStorage.isAuthorized()) {
             this.toMainActivity();
         }
@@ -73,6 +74,9 @@ public class LoginActivity extends AppCompatActivity {
                 if (authorisationResult.isSuccess()) {
                     helloFriend();
                     toMainActivity();
+                    setResult(Activity.RESULT_OK);
+                    //Complete and destroy login activity once successful
+                    finish();
                 } else {
                     showLoginFailed(R.string.login_failed);
                     toggleControlsState(loginButton, usernameEditText, passwordEditText, true);
