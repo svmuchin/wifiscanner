@@ -4,21 +4,22 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Messenger;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.wifi.wifiscanner.R;
 import com.wifi.wifiscanner.presentation.activity.ui.login.LoginActivity;
-import com.wifi.wifiscanner.services.history.HistoryAsyncTask;
+import com.wifi.wifiscanner.services.handler.MainHandler;
 import com.wifi.wifiscanner.services.history.HistoryService;
 import com.wifi.wifiscanner.services.history.HistoryServiceConnection;
 import com.wifi.wifiscanner.services.scan.ScanService;
@@ -27,24 +28,26 @@ import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.presentation.Divider;
 import com.wifi.wifiscanner.presentation.network.NetworksAdapter;
 import com.wifi.wifiscanner.rest.RestClient;
-import com.wifi.wifiscanner.storage.SimpleStorage;
-import com.wifi.wifiscanner.util.Serializer;
+import com.wifi.wifiscanner.storage.DBStorage;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView networksRecycler;
-    private Report report = new Report();
-    private ScanServiceConnection scanConn = new ScanServiceConnection();
+
+    public Report report = new Report();
+    private Messenger mainMessenger;
+
     private HistoryServiceConnection historyConn = new HistoryServiceConnection();
     private SwipeRefreshLayout refreshLayout;
     public RestClient restClient;
-
+    private ScanServiceConnection scanConn;
 
     // TODO: убрать после реализации авторизации
     private static final String EMAIL = "mail@mail.com";
     private static final String PASSWORD = "defaultPassword";
+    private NetworksAdapter networksAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,11 +60,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         this.networksRecycler = this.findViewById(R.id.networks_recycler);
         this.networksRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
-        Intent scanServiceIntent = new Intent(this, ScanService.class);
-        bindService(scanServiceIntent, scanConn, BIND_AUTO_CREATE);
+        MainHandler mainHandler = new MainHandler(networksRecycler);
+        this.mainMessenger = new Messenger(mainHandler);
+        this.scanConn = new ScanServiceConnection(this.mainMessenger);
+
         Intent historyServiceIntent = new Intent(this, HistoryService.class);
         bindService(historyServiceIntent, historyConn, BIND_AUTO_CREATE);
-        // this.report = this.getReport();
         this.setAdapter(this.report);
         Intent historyIntent = new Intent(this, LoginActivity.class);
         this.startActivity(historyIntent);
@@ -73,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     protected void onResume() {
         super.onResume();
-        // this.report = this.getReport();
         this.setAdapter(this.report);
     }
 
@@ -123,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void saveReport() {
-        SimpleStorage.getStorage().save(this.report);
+        DBStorage.getStorage(getApplicationContext()).save(this.report);
     }
 
     public void scan() {
@@ -136,7 +139,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     private void setAdapter(Report report) {
         if (this.hasReport(report)) {
-            this.networksRecycler.setAdapter(new NetworksAdapter(report));
+            networksAdapter = new NetworksAdapter(report);
+            this.networksRecycler.setAdapter(networksAdapter);
+            this.networksRecycler.invalidate();
         }
     }
 
@@ -145,8 +150,11 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void serviceScan() {
-        this.report = this.scanConn.getService().scan();
-        this.setAdapter(this.report);
+        Log.d("report before", report.toString());
+        Intent scanServiceIntent = new Intent(this, ScanService.class);
+        bindService(scanServiceIntent, scanConn, BIND_AUTO_CREATE);
+        this.setAdapter(report);
+        Log.d("report after", report.toString());
     }
 
     public void handleOnScan(View view) {

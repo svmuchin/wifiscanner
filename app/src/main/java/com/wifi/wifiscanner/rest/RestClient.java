@@ -58,7 +58,7 @@ public class RestClient {
     }
 
     private StringEntity getSendReportBody(Report report) {
-        return new StringEntity(Serializer.serialize(report), Constants.UTF_8);
+        return new StringEntity(Serializer.reportSerialize(report), Constants.UTF_8);
     }
 
     private Header[] getAuthHeaders() {

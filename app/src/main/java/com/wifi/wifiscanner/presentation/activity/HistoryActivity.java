@@ -12,7 +12,7 @@ import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.presentation.Divider;
 import com.wifi.wifiscanner.presentation.OnReportClickListener;
 import com.wifi.wifiscanner.presentation.history.HistoryAdapter;
-import com.wifi.wifiscanner.storage.SimpleStorage;
+import com.wifi.wifiscanner.storage.DBStorage;
 
 import java.util.List;
 
@@ -36,7 +36,7 @@ public class HistoryActivity extends AppCompatActivity implements OnReportClickL
   }
 
   private List<Report> getReports() {
-    return SimpleStorage.getStorage().getAll();
+    return DBStorage.getStorage(getApplicationContext()).getAll();
   }
 
   @Override

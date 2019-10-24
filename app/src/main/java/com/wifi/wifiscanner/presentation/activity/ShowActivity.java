@@ -14,7 +14,7 @@ import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.presentation.Divider;
 import com.wifi.wifiscanner.presentation.network.NetworksAdapter;
 import com.wifi.wifiscanner.rest.RestClient;
-import com.wifi.wifiscanner.storage.SimpleStorage;
+import com.wifi.wifiscanner.storage.DBStorage;
 
 public class ShowActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -37,7 +37,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         if (bundle != null) {
             String reportId = bundle.getString(REPORT_ID);
             if (reportId != null) {
-                this.report = SimpleStorage.getStorage().get(reportId);
+                this.report = DBStorage.getStorage(getApplicationContext()).get(1);
             }
         }
     }
