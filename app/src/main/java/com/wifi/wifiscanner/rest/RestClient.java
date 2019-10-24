@@ -1,9 +1,11 @@
 package com.wifi.wifiscanner.rest;
 
 import android.content.Context;
+import android.os.Messenger;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.wifi.wifiscanner.dto.Report;
+import com.wifi.wifiscanner.presentation.OnAuthorisationResultListener;
 import com.wifi.wifiscanner.rest.handler.BaseTextHttpResponseHandler;
 import com.wifi.wifiscanner.rest.handler.SignInTextHttpResponseHandler;
 import com.wifi.wifiscanner.rest.header.SimpleHeader;
@@ -31,13 +33,13 @@ public class RestClient {
         this.authorizationStorage = new AuthorizationStorage(context);
     }
 
-    public void signIn(String email, String password) {
+    public void signIn(String email, String password, Messenger messenger) {
         this.client.post(this.context,
                 SIGN_UP_URL,
                 null,
                 this.getSignUpBody(email, password),
                 APPLICATION_JSON,
-                new SignInTextHttpResponseHandler(this.context));
+                new SignInTextHttpResponseHandler(this.context, messenger));
     }
 
     public void sendReport(Report report) {

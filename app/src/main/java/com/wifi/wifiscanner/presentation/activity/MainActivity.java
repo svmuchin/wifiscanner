@@ -13,22 +13,18 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.wifi.wifiscanner.R;
-import com.wifi.wifiscanner.presentation.activity.ui.login.LoginActivity;
-import com.wifi.wifiscanner.services.history.HistoryAsyncTask;
-import com.wifi.wifiscanner.services.history.HistoryService;
-import com.wifi.wifiscanner.services.history.HistoryServiceConnection;
-import com.wifi.wifiscanner.services.scan.ScanService;
-import com.wifi.wifiscanner.services.scan.ScanServiceConnection;
 import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.presentation.Divider;
 import com.wifi.wifiscanner.presentation.network.NetworksAdapter;
 import com.wifi.wifiscanner.rest.RestClient;
+import com.wifi.wifiscanner.services.history.HistoryService;
+import com.wifi.wifiscanner.services.history.HistoryServiceConnection;
+import com.wifi.wifiscanner.services.scan.ScanService;
+import com.wifi.wifiscanner.services.scan.ScanServiceConnection;
 import com.wifi.wifiscanner.storage.SimpleStorage;
-import com.wifi.wifiscanner.util.Serializer;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
@@ -61,13 +57,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         bindService(scanServiceIntent, scanConn, BIND_AUTO_CREATE);
         Intent historyServiceIntent = new Intent(this, HistoryService.class);
         bindService(historyServiceIntent, historyConn, BIND_AUTO_CREATE);
-        // this.report = this.getReport();
         this.setAdapter(this.report);
-        Intent historyIntent = new Intent(this, LoginActivity.class);
-        this.startActivity(historyIntent);
-        //if (!this.restClient.isAuthorized()) {
-            this.restClient.signIn(EMAIL, PASSWORD);
-        //}
+        this.restClient.signIn(EMAIL, PASSWORD);
     }
 
     @Override
