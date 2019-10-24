@@ -38,6 +38,7 @@ public class ScanService extends Service {
     private List<Messenger> clientMessengers = new ArrayList<>();
     private final ScanHandler scanHandler = new ScanHandler(clientMessengers);
     private Messenger scanServiceMessenger = new Messenger(scanHandler);
+    private Thread thread;
 
 
     @Nullable
@@ -73,7 +74,7 @@ public class ScanService extends Service {
         return report;
     }
 
-    public Report scan() {
+    public void scan() {
         if (task != null) {
             task.cancel();
         }
@@ -107,6 +108,5 @@ public class ScanService extends Service {
             }
         };
         timer.schedule(task, 0, 5000);
-        return report;
     }
 }

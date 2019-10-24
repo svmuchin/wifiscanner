@@ -3,10 +3,7 @@ package com.wifi.wifiscanner.services.history;
 import android.app.Service;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
 import android.support.annotation.Nullable;
 
 import com.wifi.wifiscanner.da.ReportDao;

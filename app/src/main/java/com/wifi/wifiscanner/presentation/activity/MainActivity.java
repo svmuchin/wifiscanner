@@ -11,7 +11,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     private static final String EMAIL = "mail@mail.com";
     private static final String PASSWORD = "defaultPassword";
     private NetworksAdapter networksAdapter;
+    private MainHandler mainHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         this.networksRecycler = this.findViewById(R.id.networks_recycler);
         this.networksRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
-        MainHandler mainHandler = new MainHandler(networksRecycler);
+        this.mainHandler = new MainHandler(networksRecycler);
         this.mainMessenger = new Messenger(mainHandler);
         this.scanConn = new ScanServiceConnection(this.mainMessenger);
 
@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         Intent historyIntent = new Intent(this, LoginActivity.class);
         this.startActivity(historyIntent);
         //if (!this.restClient.isAuthorized()) {
-            this.restClient.signIn(EMAIL, PASSWORD);
+        this.restClient.signIn(EMAIL, PASSWORD);
         //}
     }
 
@@ -150,11 +150,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void serviceScan() {
-        Log.d("report before", report.toString());
+        this.mainHandler.invalidate();
         Intent scanServiceIntent = new Intent(this, ScanService.class);
         bindService(scanServiceIntent, scanConn, BIND_AUTO_CREATE);
-        this.setAdapter(report);
-        Log.d("report after", report.toString());
     }
 
     public void handleOnScan(View view) {

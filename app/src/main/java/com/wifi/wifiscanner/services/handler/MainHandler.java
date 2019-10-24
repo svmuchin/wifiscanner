@@ -10,8 +10,8 @@ import com.wifi.wifiscanner.services.scan.ScanService;
 import com.wifi.wifiscanner.util.Serializer;
 
 public class MainHandler extends Handler {
-
     private RecyclerView networksRecycler;
+    private boolean invalidate;
 
     public MainHandler(RecyclerView networksRecycler) {
         this.networksRecycler = networksRecycler;
@@ -21,7 +21,13 @@ public class MainHandler extends Handler {
     public void handleMessage(Message msg) {
         String reportData = msg.getData().getString(ScanService.REPORT_DATA, "");
         Report report = Serializer.deserialize(reportData, Report.class);
-        this.networksRecycler.setAdapter(new NetworksAdapter(report));
-        this.networksRecycler.invalidate();
+        if (invalidate) {
+            this.networksRecycler.setAdapter(new NetworksAdapter(report));
+            this.invalidate = false;
+        }
+    }
+
+    public void invalidate() {
+        this.invalidate = true;
     }
 }
