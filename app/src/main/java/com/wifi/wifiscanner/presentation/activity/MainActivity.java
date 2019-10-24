@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.wifi.wifiscanner.R;
 import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.presentation.Divider;
-import com.wifi.wifiscanner.presentation.activity.ui.login.LoginActivity;
 import com.wifi.wifiscanner.presentation.network.NetworksAdapter;
 import com.wifi.wifiscanner.rest.RestClient;
 import com.wifi.wifiscanner.services.handler.MainHandler;
