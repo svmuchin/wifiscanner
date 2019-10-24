@@ -21,7 +21,7 @@ public interface ReportDao {
   ReportEntity getById(long reportId);
 
   @Insert(onConflict = OnConflictStrategy.REPLACE)
-  void insert(ReportEntity report);
+  Long insert(ReportEntity report);
 
   @Update
   void update(ReportEntity report);

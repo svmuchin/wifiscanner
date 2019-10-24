@@ -16,6 +16,7 @@ import android.util.Log;
 
 import com.wifi.wifiscanner.dto.Device;
 import com.wifi.wifiscanner.dto.Report;
+import com.wifi.wifiscanner.dto.StubReport;
 import com.wifi.wifiscanner.services.handler.ScanHandler;
 import com.wifi.wifiscanner.util.Constants;
 import com.wifi.wifiscanner.util.Serializer;
@@ -81,8 +82,8 @@ public class ScanService extends Service {
             @Override
             public void run() {
                 wifiManager.startScan();
-                report = new Report(wifiManager.getScanResults(), this.createDevice(wifiManager.getConnectionInfo()));
-//                    report = new StubReport();
+                // report = new Report(wifiManager.getScanResults(), this.createDevice(wifiManager.getConnectionInfo()));
+                report = new StubReport();
                 Message msg = Message.obtain(scanHandler);
                 Bundle bundle = new Bundle();
                 bundle.putString(REPORT_DATA, Serializer.serialize(report));

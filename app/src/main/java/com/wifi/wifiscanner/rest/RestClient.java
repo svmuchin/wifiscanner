@@ -5,6 +5,7 @@ import android.os.Messenger;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.wifi.wifiscanner.dto.Report;
+import com.wifi.wifiscanner.presentation.OnAuthorisationResultListener;
 import com.wifi.wifiscanner.rest.handler.BaseTextHttpResponseHandler;
 import com.wifi.wifiscanner.rest.handler.SignInTextHttpResponseHandler;
 import com.wifi.wifiscanner.rest.handler.TestDownloadHandler;

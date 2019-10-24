@@ -14,23 +14,23 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.widget.TextView;
 
 import com.wifi.wifiscanner.R;
 import com.wifi.wifiscanner.dto.Report;
+import com.wifi.wifiscanner.dto.Reports;
 import com.wifi.wifiscanner.presentation.Divider;
 import com.wifi.wifiscanner.presentation.OnReportClickListener;
 import com.wifi.wifiscanner.presentation.history.HistoryAdapter;
 import com.wifi.wifiscanner.services.history.HistoryService;
-import com.wifi.wifiscanner.storage.DBStorage;
 import com.wifi.wifiscanner.util.Constants;
+import com.wifi.wifiscanner.util.Serializer;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class HistoryActivity extends AppCompatActivity implements OnReportClickListener {
 
     private RecyclerView historyRecycler;
-    private ServiceConnection serviceConnection;
+    private ServiceConnection historyServiceConnection;
     private Messenger serviceMessenger;
     private Messenger myMessenger;
 
@@ -41,12 +41,13 @@ public class HistoryActivity extends AppCompatActivity implements OnReportClickL
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.history_toolbar));
         this.historyRecycler = this.findViewById(R.id.history_recycler);
         this.historyRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
+        this.historyRecycler.setAdapter(new HistoryAdapter(new ArrayList<Report>(), this));
         this.myMessenger = new Messenger(new IncomingHandler());
-        this.serviceConnection = new ServiceConnection() {
+        this.historyServiceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 serviceMessenger = new Messenger(service);
-                Message msg = Message.obtain(null, HistoryService.SET_OBSERVER);
+                Message msg = Message.obtain(null, HistoryService.MSG_REGISTER);
                 msg.replyTo = myMessenger;
                 try {
                     serviceMessenger.send(msg);
@@ -58,19 +59,10 @@ public class HistoryActivity extends AppCompatActivity implements OnReportClickL
             @Override
             public void onServiceDisconnected(ComponentName name) {
                 serviceMessenger = null;
-                Log.d(TAG, "Disconnect from MyService!");
             }
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        this.historyRecycler.setAdapter(new HistoryAdapter(getReports(), this));
-    }
-
-    private List<Report> getReports() {
-        return DBStorage.getStorage(getApplicationContext()).getAll();
+        };
+        Intent historyServiceIntent = new Intent(this, HistoryService.class);
+        bindService(historyServiceIntent, this.historyServiceConnection, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -87,26 +79,41 @@ public class HistoryActivity extends AppCompatActivity implements OnReportClickL
         this.startActivity(mainIntent);
     }
 
-    private class IncomingHandler extends Handler {
-
-        private TextView myServiceWorkResultTextView;
-
-        public IncomingHandler(TextView myServiceWorkResultTextView) {
-            this.myServiceWorkResultTextView = myServiceWorkResultTextView;
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Message msg = Message.obtain(null, HistoryService.MSG_UNREGISTER);
+        msg.replyTo = this.myMessenger;
+        try {
+            this.serviceMessenger.send(msg);
+        } catch (RemoteException ex) {
+            Log.e(Constants.HISTORY_TAG, ex.getMessage(), ex);
         }
+        this.unbindService(this.historyServiceConnection);
+        this.stopService(new Intent(this, HistoryService.class));
+    }
+
+    private class IncomingHandler extends Handler {
 
         @Override
         public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case HistoryService.MSG_GET_ALL_RESULT_KEY:
-                    HistoryAdapter adapter = (HistoryAdapter) historyRecycler.getAdapter();
-                    msg.getData()
-                    List<Report> reports=
-                    adapter.setReports();
-                    break;
+            if (msg.what == HistoryService.MSG_REGISTER_RESULT) {
+                Message getAllMsg = Message.obtain(null, HistoryService.MSG_GET_ALL);
+                try {
+                    serviceMessenger.send(getAllMsg);
+                } catch (RemoteException ex) {
+                    Log.e(Constants.HISTORY_TAG, ex.getMessage(), ex);
+                }
             }
-            int work_result = msg.getData().getInt(MyService.WORK_RESULT_KEY);
-            this.myServiceWorkResultTextView.setText(String.format(workResultTextFormat, work_result));
+            if (msg.what == HistoryService.MSG_GET_ALL_RESULT_KEY ||
+                    msg.what == HistoryService.MSG_DELETE_RESULT_KEY) {
+                String inputData = msg.getData().getString(HistoryService.REPORTS_KEY);
+                Reports reports = Serializer.deserialize(inputData, Reports.class);
+                HistoryAdapter adapter = (HistoryAdapter) historyRecycler.getAdapter();
+                adapter.setReports(reports.getReports());
+                historyRecycler.setAdapter(adapter);
+                historyRecycler.invalidate();
+            }
         }
     }
 }

@@ -11,4 +11,9 @@ public class Constants {
     public static final String NET_DOWNLOAD_TAG = "NET_DOWNLOAD";
     public static final String SCAN_SERVICE_TAG = "SCAN_SERVICE";
     public static final String AUTHORISATION_TAG = "AUTHORISATION";
+    public static final String HISTORY_TAG = "HISTORY_TAG";
+    public static final String SAVE_TAG = "SAVE_TAG";
+    public static final String DELETE_TAG = "DELETE_TAG";
+    public static final String GET_TAG = "GET_TAG";
+    public static final String GET_ALL_TAG = "GET_ALL_TAG";
 }
