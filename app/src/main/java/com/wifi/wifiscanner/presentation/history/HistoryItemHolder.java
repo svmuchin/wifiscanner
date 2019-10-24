@@ -32,7 +32,7 @@ public class HistoryItemHolder extends RecyclerView.ViewHolder implements View.O
     }
 
     public void bind(Report report) {
-        Date time = report.getCalendar().getTime();
+        Date time = report.getCreated().getTime();
         this.date.setText(SIMPLE_DATE_FORMAT.format(time));
         this.time.setText(SIMPLE_TIME_FORMAT.format(time));
     }

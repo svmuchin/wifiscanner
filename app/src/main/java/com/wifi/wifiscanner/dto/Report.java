@@ -13,7 +13,7 @@ public class Report {
 
   private String id;
 
-  private Calendar calendar;
+  private Calendar created;
 
   private Device device;
 
@@ -25,7 +25,7 @@ public class Report {
 
   public Report(List<ScanResult> scanResults, Device device) {
     this.id = UUID.randomUUID().toString();
-    this.calendar = Calendar.getInstance();
+    this.created = Calendar.getInstance();
     this.device = device;
     this.accessPoints = this.createResults(scanResults);
   }
@@ -34,8 +34,8 @@ public class Report {
     return id;
   }
 
-  public Calendar getCalendar() {
-    return calendar;
+  public Calendar getCreated() {
+    return created;
   }
 
   public List<AccessPoint> getAccessPoints() {
@@ -58,8 +58,8 @@ public class Report {
     this.id = id;
   }
 
-  public void setCalendar(Calendar calendar) {
-    this.calendar = calendar;
+  public void setCreated(Calendar created) {
+    this.created = created;
   }
 
   private List<AccessPoint> createResults(List<ScanResult> scanResults) {
