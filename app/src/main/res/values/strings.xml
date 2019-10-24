@@ -21,7 +21,7 @@
     <string name="title_activity_login">Вход</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
-    <string name="action_sign_in">Sign in</string>
+    <string name="action_sign_in">Войти</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Здравствуйте !"</string>
     <string name="invalid_username">Некорректный email</string>

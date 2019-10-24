@@ -16,6 +16,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".presentation.activity.ui.login.LoginActivity"
+            android:noHistory="true"
             android:label="@string/title_activity_login">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
