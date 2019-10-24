@@ -60,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         super.onCreate(savedInstanceState);
         this.restClient = new RestClient(this);
         this.setContentView(R.layout.activity_main);
-        this.setSupportActionBar((Toolbar) this.findViewById(R.id.main_toolbar));
         this.initRefreshLayout();
         this.initControlsState();
         this.networksRecycler = this.findViewById(R.id.networks_recycler);

@@ -6,21 +6,14 @@
     android:layout_height="match_parent"
     tools:context=".presentation.activity.HistoryActivity">
 
-    <android.support.design.widget.AppBarLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/history_recycler"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/bg_green"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/history_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/bg_green"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_history" />
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -38,7 +38,6 @@ public class HistoryActivity extends AppCompatActivity implements OnReportClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        this.setSupportActionBar((Toolbar) this.findViewById(R.id.history_toolbar));
         this.historyRecycler = this.findViewById(R.id.history_recycler);
         this.historyRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
         this.historyRecycler.setAdapter(new HistoryAdapter(new ArrayList<Report>(), this));
