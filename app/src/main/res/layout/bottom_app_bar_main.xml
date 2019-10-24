@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".presentation.activity.MainActivity"
+    tools:showIn="@layout/activity_main">
+
+    <android.support.design.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="@color/colorPrimary"
+        android:padding="8dp"
+        app:fabAlignmentMode="end">
+
+        <ImageButton
+            android:id="@+id/main_button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:contentDescription="@string/main_button_save_text"
+            android:onClick="handleOnSave"
+            android:src="@drawable/ic_save_24px" />
+
+        <ImageButton
+            android:id="@+id/main_button_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:contentDescription="@string/main_button_send_text"
+            android:onClick="handleOnSend"
+            android:src="@drawable/ic_send_24px" />
+        <ImageButton
+            android:id="@+id/main_button_history"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorPrimary"
+            android:contentDescription="@string/main_button_history_text"
+            android:onClick="handleOnHistory"
+            android:src="@drawable/ic_history_24px" />
+    </android.support.design.bottomappbar.BottomAppBar>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/main_button_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/main_button_scan_text"
+        android:onClick="handleOnScan"
+        android:src="@drawable/ic_perm_scan_wifi_24px"
+        app:maxImageSize="36dp"
+        app:layout_anchor="@id/bottomAppBar" />
+
+</android.support.design.widget.CoordinatorLayout>

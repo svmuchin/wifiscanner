@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -30,13 +31,15 @@ import com.wifi.wifiscanner.util.Serializer;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView networksRecycler;
     private Report report = new Report();
     private ScanServiceConnection scanConn = new ScanServiceConnection();
     private HistoryServiceConnection historyConn = new HistoryServiceConnection();
+    private SwipeRefreshLayout refreshLayout;
     public RestClient restClient;
+
 
     // TODO: убрать после реализации авторизации
     private static final String EMAIL = "mail@mail.com";
@@ -48,12 +51,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         this.restClient = new RestClient(this);
         this.setContentView(R.layout.activity_main);
         this.setSupportActionBar((Toolbar) this.findViewById(R.id.main_toolbar));
+        refreshLayout = findViewById(R.id.refresh_layout);
+        refreshLayout.setOnRefreshListener(this);
+
         this.networksRecycler = this.findViewById(R.id.networks_recycler);
         this.networksRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
-        this.<Button>findViewById(R.id.main_button_scan).setOnClickListener(this);
-        this.<Button>findViewById(R.id.main_button_history).setOnClickListener(this);
-        this.<Button>findViewById(R.id.main_button_save).setOnClickListener(this);
-        this.<Button>findViewById(R.id.main_button_send).setOnClickListener(this);
         Intent scanServiceIntent = new Intent(this, ScanService.class);
         bindService(scanServiceIntent, scanConn, BIND_AUTO_CREATE);
         Intent historyServiceIntent = new Intent(this, HistoryService.class);
@@ -100,39 +102,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.main_button_scan:
-                this.scan();
-                break;
-            case R.id.main_button_history:
-                Intent historyIntent = new Intent(this, HistoryActivity.class);
-                this.startActivity(historyIntent);
-                break;
-            case R.id.main_button_save:
-                if (this.hasReport(report)) {
-                    this.saveReport();
-                    Toast.makeText(this, "Отчёт сохранён.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Отчёт пуст.", Toast.LENGTH_SHORT).show();
-                }
-                break;
-            case R.id.main_button_send:
-                if (this.hasReport(report)) {
-                    this.restClient.sendReport(this.report);
-                    Toast.makeText(this, "Отчёт отправлен.", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(this, "Отчёт пуст.", Toast.LENGTH_SHORT).show();
-                }
-                break;
+    public void handleOnSave(View v) {
+        if (this.hasReport(report)) {
+            this.saveReport();
+            Toast.makeText(this, "Отчёт сохранён.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Отчёт пуст.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void handleOnSend(View v) {
+        if (this.hasReport(report)) {
+            this.restClient.sendReport(this.report);
+            Toast.makeText(this, "Отчёт отправлен.", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "Отчёт пуст.", Toast.LENGTH_SHORT).show();
         }
     }
 
     private void saveReport() {
-        HistoryAsyncTask asyncTask = new HistoryAsyncTask();
-        asyncTask.insert(getApplicationContext(), this.report);
-//    historyConn.getService().insert(report);
         SimpleStorage.getStorage().save(this.report);
     }
 
@@ -142,10 +130,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
-    }
-
-    private Report getReport() {
-        return Serializer.deserialize(getIntent().getStringExtra(ScanService.REPORT_DATA), Report.class);
     }
 
     private void setAdapter(Report report) {
@@ -161,5 +145,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void serviceScan() {
         this.report = this.scanConn.getService().scan();
         this.setAdapter(this.report);
+    }
+
+    public void handleOnScan(View view) {
+        this.scan();
+    }
+
+    public void handleOnHistory(View view) {
+        Intent historyIntent = new Intent(this, HistoryActivity.class);
+        this.startActivity(historyIntent);
+    }
+
+    @Override
+    public void onRefresh() {
+        this.refreshLayout.setRefreshing(true);
+        this.refreshLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                refreshLayout.setRefreshing(false);
+                scan();
+            }
+        }, 1000);
     }
 }
