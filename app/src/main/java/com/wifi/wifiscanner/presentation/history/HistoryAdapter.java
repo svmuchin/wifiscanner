@@ -50,4 +50,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryItemHolder> impl
     public void onElementClick(int position) {
         this.onReportClickListener.onReportClick(this.reports.get(position));
     }
+
+    public void setReports(List<Report> reports) {
+        this.reports = reports;
+    }
 }

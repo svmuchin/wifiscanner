@@ -33,13 +33,13 @@ public class RestClient {
         this.authorizationStorage = new AuthorizationStorage(context);
     }
 
-    public void signIn(String email, String password, Messenger messenger) {
+    public void signIn(String email, String password, OnAuthorisationResultListener listener) {
         this.client.post(this.context,
                 SIGN_UP_URL,
                 null,
                 this.getSignUpBody(email, password),
                 APPLICATION_JSON,
-                new SignInTextHttpResponseHandler(this.context, messenger));
+                new SignInTextHttpResponseHandler(this.context, listener));
     }
 
     public void sendReport(Report report) {
@@ -49,10 +49,6 @@ public class RestClient {
                 this.getSendReportBody(report),
                 APPLICATION_JSON,
                 new BaseTextHttpResponseHandler(Constants.SEND_REPORT_TAG));
-    }
-
-    public boolean isAuthorized() {
-        return this.authorizationStorage.isAuthorized();
     }
 
     private StringEntity getSignUpBody(String email, String password) {

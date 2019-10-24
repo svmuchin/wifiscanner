@@ -3,27 +3,72 @@ package com.wifi.wifiscanner.services.history;
 import android.app.Service;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
+import android.os.Messenger;
+import android.os.RemoteException;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.wifi.wifiscanner.da.ReportDao;
 import com.wifi.wifiscanner.da.ReportDatabase;
 import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.dto.ReportEntity;
+import com.wifi.wifiscanner.util.Constants;
+import com.wifi.wifiscanner.util.Serializer;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static android.os.FileObserver.DELETE;
 
 public class HistoryService extends Service {
 
+    public static final String REPORT_KEY = "REPORT_KEY";
+    public static final String ID_KEY = "ID_KEY";
+    public static final String REPORTS_KEY = "REPORTS_KEY";
+
+    public static final int MSG_SAVE_RESULT_KEY = 1;
+    public static final int MSG_DELETE_RESULT_KEY = 2;
+    public static final int MSG_GET_RESULT_KEY = 3;
+    public static final int MSG_GET_ALL_RESULT_KEY = 4;
+    public static final int MSG_SET_OBSERVER = 5;
+    public static final int MSG_SAVE = 6;
+    public static final int MSG_GET = 7;
+    public static final int MSG_GET_ALL = 8;
+
     private ReportDatabase reportDatabase;
     private ReportDao dao;
+    private Messenger myMessenger = new Messenger(new IncomingHandler());
+    private Messenger activityMessenger;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        this.reportDatabase = Room.databaseBuilder(getApplicationContext(), ReportDatabase.class, "database")
+                .fallbackToDestructiveMigration()
+                .build();
+        this.dao = this.reportDatabase.reportDao();
+    }
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        reportDatabase = Room.databaseBuilder(getApplicationContext(), ReportDatabase.class, "database")
-                .fallbackToDestructiveMigration()
-                .build();
-        dao = reportDatabase.reportDao();
-        return new HistoryServiceBinder(this);
+        return this.myMessenger.getBinder();
+    }
+
+    private void save(Message msg) {
+        String inputData = msg.getData().getString(REPORT_KEY);
+        Report report = Serializer.deserialize(inputData, Report.class);
+        insert(report);
+        Message replyMsg = Message.obtain(null, MSG_SAVE_RESULT_KEY);
+        try {
+            activityMessenger.send(replyMsg);
+        } catch (RemoteException ex) {
+            Log.e(Constants.SAVE_TAG, ex.getMessage(), ex);
+        }
     }
 
     public void insert(final Report report) {
@@ -38,22 +83,39 @@ public class HistoryService extends Service {
         thread.start();
     }
 
-    public void delete(final Report report) {
+    private void delete(Message msg) {
+        final String inputData = msg.getData().getString(REPORT_KEY);
         final Thread thread = new Thread() {
             @Override
             public void run() {
-                dao.delete(new ReportEntity(report));
+                dao.delete(new ReportEntity(Serializer.deserialize(inputData, Report.class)));
+                Message replyMsg = Message.obtain(null, MSG_DELETE_RESULT_KEY);
+                try {
+                    activityMessenger.send(replyMsg);
+                } catch (RemoteException ex) {
+                    Log.e(Constants.DELETE_TAG, ex.getMessage(), ex);
+                }
                 this.interrupt();
             }
         };
         thread.start();
     }
 
-    public void getById(final long reportId) {
+    public void getById(Message msg) {
+        final long reportId = msg.getData().getLong(ID_KEY);
         final Thread thread = new Thread() {
             @Override
             public void run() {
                 Report report = dao.getById(reportId).getReport();
+                Message replyMsg = Message.obtain(null, MSG_GET_RESULT_KEY);
+                Bundle outputData = new Bundle();
+                outputData.putString(REPORT_KEY, Serializer.serialize(report));
+                replyMsg.setData(outputData);
+                try {
+                    activityMessenger.send(replyMsg);
+                } catch (RemoteException ex) {
+                    Log.e(Constants.GET_TAG, ex.getMessage(), ex);
+                }
                 this.interrupt();
             }
         };
@@ -64,9 +126,51 @@ public class HistoryService extends Service {
         final Thread thread = new Thread() {
             @Override
             public void run() {
+                List<ReportEntity> results = dao.getAll();
+                List<Report> reports = toReports(results);
+                Message replyMsg = Message.obtain(null, MSG_GET_ALL_RESULT_KEY);
+                Bundle outputData = new Bundle();
+                outputData.putString(REPORTS_KEY, Serializer.serialize(reports));
+                replyMsg.setData(outputData);
+                try {
+                    activityMessenger.send(replyMsg);
+                } catch (RemoteException ex) {
+                    Log.e(Constants.GET_ALL_TAG, ex.getMessage(), ex);
+                }
                 this.interrupt();
             }
         };
         thread.start();
+    }
+    private List<Report> toReports(List<ReportEntity> results) {
+        ArrayList<Report> reports = new ArrayList<>();
+        for (ReportEntity result : results) {
+            reports.add(result.getReport());
+        }
+        return reports;
+    }
+    private class IncomingHandler extends Handler {
+
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_SET_OBSERVER:
+                    activityMessenger = msg.replyTo;
+                    break;
+                case MSG_SAVE:
+                    save(msg);
+                    break;
+                case MSG_GET:
+                    getById(msg);
+                    break;
+                case MSG_GET_ALL:
+                    getAll();
+                    break;
+                case DELETE:
+                    delete(msg);
+                    break;
+            }
+        }
+
     }
 }

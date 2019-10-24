@@ -15,12 +15,11 @@ import com.wifi.wifiscanner.R;
 import com.wifi.wifiscanner.rest.RestClient;
 import com.wifi.wifiscanner.rest.handler.SignInTextHttpResponseHandler;
 
-public class LoginViewModel extends ViewModel {
+public class LoginViewModel extends ViewModel implements OnAuthorisationResultListener {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<AuthorisationResult> loginResult = new MutableLiveData<>();
     private RestClient restClient;
-    private Messenger messenger = new Messenger(new IncomingHandler());
 
     public LoginViewModel(RestClient restClient) {
         this.restClient = restClient;
@@ -35,7 +34,7 @@ public class LoginViewModel extends ViewModel {
     }
 
     public void login(String username, String password) {
-        this.restClient.signIn(username, password, this.messenger);
+        this.restClient.signIn(username, password, this);
     }
 
     public void loginDataChanged(String username, String password) {
@@ -65,13 +64,8 @@ public class LoginViewModel extends ViewModel {
         return password != null && password.trim().length() > 5;
     }
 
-    private class IncomingHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == SignInTextHttpResponseHandler.AUTHORISATION_RESULT) {
-                String code = msg.getData().getString(SignInTextHttpResponseHandler.AUTHORISATION_RESULT_CODE, AuthorisationResult.ERROR_CODE);
-                loginResult.setValue(AuthorisationResult.from(code));
-            }
-        }
+    @Override
+    public void onAuthorisationResult(AuthorisationResult authorisationResult) {
+        this.loginResult.postValue(authorisationResult);
     }
 }
