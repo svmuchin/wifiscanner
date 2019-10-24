@@ -1,8 +1,8 @@
 package com.wifi.wifiscanner.presentation.activity.ui.login;
 
-import android.app.Activity;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -18,17 +18,28 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.wifi.wifiscanner.presentation.activity.data.AuthorisationResult;
+import com.wifi.wifiscanner.rest.AuthorizationStorage;
+
 import com.wifi.wifiscanner.R;
+import com.wifi.wifiscanner.presentation.activity.MainActivity;
 
 public class LoginActivity extends AppCompatActivity {
 
     private LoginViewModel loginViewModel;
+    private AuthorizationStorage authorizationStorage;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory())
+        this.authorizationStorage = new AuthorizationStorage(this);
+        // TODO: чтобы всегда попадать на авторизацию раскоментируй строчку ниже
+        // this.authorizationStorage.logout();
+        if (this.authorizationStorage.isAuthorized()) {
+            this.toMainActivity();
+        }
+        this.loginViewModel = ViewModelProviders.of(this, new LoginViewModelFactory(this))
                 .get(LoginViewModel.class);
 
         final EditText usernameEditText = findViewById(R.id.username);
@@ -36,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         final Button loginButton = findViewById(R.id.login);
         final ProgressBar loadingProgressBar = findViewById(R.id.loading);
 
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
+        this.loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
             public void onChanged(@Nullable LoginFormState loginFormState) {
                 if (loginFormState == null) {
@@ -52,23 +63,19 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
+        this.loginViewModel.getLoginResult().observe(this, new Observer<AuthorisationResult>() {
             @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
+            public void onChanged(@Nullable AuthorisationResult authorisationResult) {
+                if (authorisationResult == null) {
                     return;
                 }
                 loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
+                if (authorisationResult.isSuccess()) {
+                    helloFriend();
+                    toMainActivity();
+                } else {
+                    showLoginFailed(R.string.login_failed);
                 }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-                setResult(Activity.RESULT_OK);
-
-                //Complete and destroy login activity once successful
-                finish();
             }
         });
 
@@ -113,10 +120,14 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
+    private void toMainActivity() {
+        Intent mainActivityIntent = new Intent(LoginActivity.this, MainActivity.class);
+        startActivity(mainActivityIntent);
+    }
+
+    private void helloFriend() {
         // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.welcome), Toast.LENGTH_LONG).show();
     }
 
     private void showLoginFailed(@StringRes Integer errorString) {

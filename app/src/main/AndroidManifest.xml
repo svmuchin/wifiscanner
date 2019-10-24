@@ -16,7 +16,12 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".presentation.activity.ui.login.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".presentation.activity.ShowActivity"
             android:label="@string/title_activity_show"
@@ -28,13 +33,7 @@
         <activity
             android:name=".presentation.activity.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/AppTheme.NoActionBar"></activity>
 
         <service android:name=".services.scan.ScanService" />
         <service android:name=".services.history.HistoryService" />
