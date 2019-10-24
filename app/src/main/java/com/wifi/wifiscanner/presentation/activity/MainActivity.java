@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.wifi.wifiscanner.R;
+import com.wifi.wifiscanner.presentation.activity.ui.login.LoginActivity;
 import com.wifi.wifiscanner.services.history.HistoryAsyncTask;
 import com.wifi.wifiscanner.services.history.HistoryService;
 import com.wifi.wifiscanner.services.history.HistoryServiceConnection;
@@ -40,7 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // TODO: убрать после реализации авторизации
     private static final String EMAIL = "mail@mail.com";
-    private static final String PASSWORD = "UNQHezQI2mMjMlsnJyXP";
+    private static final String PASSWORD = "defaultPassword";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +61,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         bindService(historyServiceIntent, historyConn, BIND_AUTO_CREATE);
         // this.report = this.getReport();
         this.setAdapter(this.report);
-
-        if (!this.restClient.isAuthorized()) {
+        Intent historyIntent = new Intent(this, LoginActivity.class);
+        this.startActivity(historyIntent);
+        //if (!this.restClient.isAuthorized()) {
             this.restClient.signIn(EMAIL, PASSWORD);
-        }
+        //}
     }
 
     @Override
