@@ -5,23 +5,33 @@ import android.os.Messenger;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.wifi.wifiscanner.dto.Report;
-import com.wifi.wifiscanner.presentation.OnAuthorisationResultListener;
 import com.wifi.wifiscanner.rest.handler.BaseTextHttpResponseHandler;
 import com.wifi.wifiscanner.rest.handler.SignInTextHttpResponseHandler;
+import com.wifi.wifiscanner.rest.handler.TestDownloadHandler;
+import com.wifi.wifiscanner.rest.handler.TestUploadHandler;
 import com.wifi.wifiscanner.rest.header.SimpleHeader;
 import com.wifi.wifiscanner.util.Constants;
 import com.wifi.wifiscanner.util.Serializer;
 
+import java.io.IOException;
+
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.entity.BufferedHttpEntity;
+import cz.msebera.android.httpclient.entity.ByteArrayEntity;
 import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class RestClient {
 
     private static final String BASE_URL = "http://172.30.14.77:3000/";
     private static final String APPLICATION_JSON = "application/json";
+    private static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
     private static final String SIGN_UP_URL = BASE_URL + "sign-in/";
     private static final String SEND_REPORT_URL = BASE_URL + "reports/";
+    private static final String DOWNLOAD_FILE_URL = BASE_URL + "load/out/";
+    private static final String UPLOAD_FILE_URL = BASE_URL + "load/in/";
     private static final String AUTH_TOKEN_NAME = "Authorization";
+    public static final int UPLOAD_FILE_SIZE = 20485760;
+    public static final String TEST_TYPE = "TEST_TYPE";
 
     private AsyncHttpClient client;
     private Context context;
@@ -51,8 +61,33 @@ public class RestClient {
                 new BaseTextHttpResponseHandler(Constants.SEND_REPORT_TAG));
     }
 
-    public boolean isAuthorized() {
-        return this.authorizationStorage.isAuthorized();
+    public void downloadTestFile(Messenger messenger) {
+        this.client.get(
+                this.context,
+                DOWNLOAD_FILE_URL,
+                this.getAuthHeaders(),
+                null,
+                new TestDownloadHandler(this.context, messenger)
+        );
+    }
+
+    public void uploadTestFile(Messenger messenger) {
+        try {
+            this.client.post(
+                    this.context,
+                    UPLOAD_FILE_URL,
+                    this.getAuthHeaders(),
+                    new BufferedHttpEntity(new ByteArrayEntity(this.generatePayload())),
+                    APPLICATION_OCTET_STREAM,
+                    new TestUploadHandler(messenger)
+            );
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private byte[] generatePayload() {
+        return new byte[UPLOAD_FILE_SIZE];
     }
 
     private StringEntity getSignUpBody(String email, String password) {

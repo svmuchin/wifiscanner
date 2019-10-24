@@ -33,13 +33,11 @@ import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView networksRecycler;
-
-    public Report report = new Report();
+    private Report report = new Report();
     private Messenger mainMessenger;
-
     private HistoryServiceConnection historyConn = new HistoryServiceConnection();
     private SwipeRefreshLayout refreshLayout;
-    public RestClient restClient;
+    private RestClient restClient;
     private ScanServiceConnection scanConn;
 
     // TODO: убрать после реализации авторизации
