@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Messenger;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -158,6 +159,16 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         this.refreshLayout = findViewById(R.id.refresh_layout);
         this.refreshLayout.setOnRefreshListener(this);
         this.refreshLayout.setProgressViewOffset(false, 0, 200);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        for (int i = 0; i < permissions.length; i++) {
+            if (Manifest.permission.ACCESS_COARSE_LOCATION.equals(permissions[i]) && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                this.serviceScan();
+            }
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
     public void setReport(Report report) {
