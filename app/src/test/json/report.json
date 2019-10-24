@@ -1,58 +1,318 @@
 {
+  "accessPoints": [
+    {
+      "BSSID": "90:3a:72:26:3a:ed",
+      "RSSI": -60,
+      "SSID": "Sberbank",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:26:3a:ec",
+      "RSSI": -58,
+      "SSID": "Guest_39r7hn75n24",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:e6:3a:ec",
+      "RSSI": -58,
+      "SSID": "GRKK",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:e6:3d:4c",
+      "RSSI": -64,
+      "SSID": "GRKK",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:26:3d:4d",
+      "RSSI": -64,
+      "SSID": "Sberbank",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:a6:3d:4c",
+      "RSSI": -64,
+      "SSID": "",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:26:3d:4c",
+      "RSSI": -64,
+      "SSID": "Guest_39r7hn75n24",
+      "channel": 2
+    },
+    {
+      "BSSID": "cc:9f:7a:ab:fd:a4",
+      "RSSI": -68,
+      "SSID": "Nokia 8",
+      "channel": 2
+    },
+    {
+      "BSSID": "28:6c:07:44:30:c9",
+      "RSSI": -72,
+      "SSID": "FIKSIKI_5G",
+      "channel": 2
+    },
+    {
+      "BSSID": "68:a8:6d:36:2a:c2",
+      "RSSI": -72,
+      "SSID": "lalala",
+      "channel": 1
+    },
+    {
+      "BSSID": "90:3a:72:e6:25:bc",
+      "RSSI": -74,
+      "SSID": "GRKK",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:26:25:bd",
+      "RSSI": -73,
+      "SSID": "Sberbank",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:a6:25:bc",
+      "RSSI": -74,
+      "SSID": "",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:26:25:bc",
+      "RSSI": -73,
+      "SSID": "Guest_39r7hn75n24",
+      "channel": 2
+    },
+    {
+      "BSSID": "d4:c1:9e:3e:79:9c",
+      "RSSI": -75,
+      "SSID": "Guest_39r7hn75n24",
+      "channel": 2
+    },
+    {
+      "BSSID": "d4:c1:9e:fe:79:9c",
+      "RSSI": -75,
+      "SSID": "GRKK",
+      "channel": 2
+    },
+    {
+      "BSSID": "d4:c1:9e:3e:79:9d",
+      "RSSI": -74,
+      "SSID": "Sberbank",
+      "channel": 2
+    },
+    {
+      "BSSID": "d4:c1:9e:be:79:9c",
+      "RSSI": -75,
+      "SSID": "",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:e6:24:0c",
+      "RSSI": -67,
+      "SSID": "GRKK",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:26:24:0c",
+      "RSSI": -69,
+      "SSID": "Guest_39r7hn75n24",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:26:24:0d",
+      "RSSI": -69,
+      "SSID": "Sberbank",
+      "channel": 2
+    },
+    {
+      "BSSID": "f8:35:dd:0a:0e:89",
+      "RSSI": -70,
+      "SSID": "Merkava4",
+      "channel": 0
+    },
+    {
+      "BSSID": "90:3a:72:a6:3b:dc",
+      "RSSI": -80,
+      "SSID": "GRKK",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:26:3b:dc",
+      "RSSI": -81,
+      "SSID": "Guest_39r7hn75n24",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:26:33:8c",
+      "RSSI": -76,
+      "SSID": "Guest_39r7hn75n24",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:e6:33:8c",
+      "RSSI": -76,
+      "SSID": "GRKK",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:26:33:8d",
+      "RSSI": -76,
+      "SSID": "Sberbank",
+      "channel": 2
+    },
+    {
+      "BSSID": "b4:18:d1:e3:29:19",
+      "RSSI": -84,
+      "SSID": "LSL.SOUND",
+      "channel": 1
+    },
+    {
+      "BSSID": "62:01:94:19:21:48",
+      "RSSI": -64,
+      "SSID": "MicroPython-192148",
+      "channel": 0
+    },
+    {
+      "BSSID": "90:3a:72:26:3f:cc",
+      "RSSI": -96,
+      "SSID": "Guest_39r7hn75n24",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:26:3b:dd",
+      "RSSI": -80,
+      "SSID": "Sberbank",
+      "channel": 2
+    },
+    {
+      "BSSID": "1c:49:7b:8a:d5:0d",
+      "RSSI": -66,
+      "SSID": "Andrew\u0027s yota",
+      "channel": 1
+    },
+    {
+      "BSSID": "00:ec:0a:62:b3:4d",
+      "RSSI": -62,
+      "SSID": "Redmi",
+      "channel": 0
+    },
+    {
+      "BSSID": "04:b1:67:01:d8:ad",
+      "RSSI": -47,
+      "SSID": "Nutwork",
+      "channel": 0
+    },
+    {
+      "BSSID": "f4:f5:db:d2:eb:17",
+      "RSSI": -62,
+      "SSID": "blackowl",
+      "channel": 0
+    },
+    {
+      "BSSID": "90:3a:72:26:3e:9c",
+      "RSSI": -86,
+      "SSID": "Guest_39r7hn75n24",
+      "channel": 2
+    },
+    {
+      "BSSID": "06:1b:6d:de:f3:24",
+      "RSSI": -73,
+      "SSID": "LG K10 (2017)_1206",
+      "channel": 0
+    },
+    {
+      "BSSID": "e4:7d:eb:1a:f4:5b",
+      "RSSI": -72,
+      "SSID": "xs-yota",
+      "channel": 0
+    },
+    {
+      "BSSID": "6e:00:6b:21:10:1f",
+      "RSSI": -63,
+      "SSID": "AndroidAP101F",
+      "channel": 0
+    },
+    {
+      "BSSID": "0a:c5:e1:ae:a6:a9",
+      "RSSI": -61,
+      "SSID": "Raketa",
+      "channel": 0
+    },
+    {
+      "BSSID": "c4:d9:87:e1:70:4e",
+      "RSSI": -67,
+      "SSID": "c0mputer",
+      "channel": 0
+    },
+    {
+      "BSSID": "a0:f3:c1:57:26:8e",
+      "RSSI": -63,
+      "SSID": "Hyperborian",
+      "channel": 1
+    },
+    {
+      "BSSID": "62:d8:19:27:fa:1b",
+      "RSSI": -65,
+      "SSID": "arboretum",
+      "channel": 0
+    },
+    {
+      "BSSID": "e4:7d:eb:14:79:0b",
+      "RSSI": -74,
+      "SSID": "wyppoue",
+      "channel": 0
+    },
+    {
+      "BSSID": "90:3a:72:e6:3e:9c",
+      "RSSI": -87,
+      "SSID": "",
+      "channel": 2
+    },
+    {
+      "BSSID": "28:6c:07:44:30:c8",
+      "RSSI": -61,
+      "SSID": "FIKSIKI",
+      "channel": 0
+    },
+    {
+      "BSSID": "78:62:56:9f:60:5f",
+      "RSSI": -61,
+      "SSID": "Airtel-E5573-605F",
+      "channel": 0
+    },
+    {
+      "BSSID": "90:3a:72:66:3f:cc",
+      "RSSI": -98,
+      "SSID": "",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:a6:24:0c",
+      "RSSI": -66,
+      "SSID": "",
+      "channel": 2
+    },
+    {
+      "BSSID": "90:3a:72:a6:33:8c",
+      "RSSI": -77,
+      "SSID": "",
+      "channel": 2
+    },
+    {
+      "BSSID": "a0:f3:c1:31:d9:f9",
+      "RSSI": -66,
+      "SSID": "OpenWrt",
+      "channel": 0
+    }
+  ],
+  "created": 1571926728699,
   "device": {
-    "ip": "02:00:00:00:00:00",
+    "ip": "172.30.14.82",
     "mac": "02:00:00:00:00:00",
     "model": "Redmi 4",
     "softVersion": "6.0.1"
   },
-  "results": [
-    {
-      "BSSID": "00:0e:8f:d3:5b:e4",
-      "RSSI": -33,
-      "SSID": "dlink",
-      "channel": 1
-    },
-    {
-      "BSSID": "18:31:bf:07:45:5c",
-      "RSSI": -84,
-      "SSID": "CTP_5G",
-      "channel": 2
-    },
-    {
-      "BSSID": "56:27:58:a1:04:0c",
-      "RSSI": -84,
-      "SSID": "Lenovo A2010-a",
-      "channel": 0
-    },
-    {
-      "BSSID": "18:31:bf:07:45:58",
-      "RSSI": -85,
-      "SSID": "CTP",
-      "channel": 0
-    },
-    {
-      "BSSID": "fc:e3:3c:e8:f3:68",
-      "RSSI": -87,
-      "SSID": "HUAWEI-Nfa6",
-      "channel": 0
-    },
-    {
-      "BSSID": "10:bf:48:3a:32:78",
-      "RSSI": -59,
-      "SSID": "Asus v3.0",
-      "channel": 0
-    },
-    {
-      "BSSID": "fc:75:16:a4:d5:8a",
-      "RSSI": -86,
-      "SSID": "Izet_97",
-      "channel": 1
-    },
-    {
-      "BSSID": "44:82:e5:58:13:c4",
-      "RSSI": -89,
-      "SSID": "HUAWEI-x5eF",
-      "channel": 0
-    }
-  ]
+  "id": "52159dcd-f339-40bc-a949-a2ea7df03743"
 }
