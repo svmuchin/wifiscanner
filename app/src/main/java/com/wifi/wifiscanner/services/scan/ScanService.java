@@ -110,16 +110,20 @@ public class ScanService extends Service {
                 try {
                     List<NetworkInterface> interfaces = Collections.list(NetworkInterface.getNetworkInterfaces());
                     for (NetworkInterface intf : interfaces) {
-                        if (!intf.getName().equalsIgnoreCase("wlan0"))
-                            continue;
-                        byte[] mac = intf.getHardwareAddress();
-                        if (mac == null) {
-                            return "";
+                        if (intf.getName().equalsIgnoreCase("wlan0")) {
+                            byte[] mac = intf.getHardwareAddress();
+                            if (mac == null) {
+                                return "";
+                            }
+                            StringBuilder buf = new StringBuilder();
+                            for (byte aMac : mac) {
+                                buf.append(String.format("%02X:", aMac));
+                            }
+                            if (buf.length() > 0) {
+                                buf.deleteCharAt(buf.length() - 1);
+                            }
+                            return buf.toString();
                         }
-                        StringBuilder buf = new StringBuilder();
-                        for (byte aMac : mac) buf.append(String.format("%02X:", aMac));
-                        if (buf.length() > 0) buf.deleteCharAt(buf.length() - 1);
-                        return buf.toString();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
