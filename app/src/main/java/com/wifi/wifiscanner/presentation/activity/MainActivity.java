@@ -26,11 +26,6 @@ import com.wifi.wifiscanner.services.history.HistoryService;
 import com.wifi.wifiscanner.services.history.HistoryServiceConnection;
 import com.wifi.wifiscanner.services.scan.ScanService;
 import com.wifi.wifiscanner.services.scan.ScanServiceConnection;
-import com.wifi.wifiscanner.storage.SimpleStorage;
-import com.wifi.wifiscanner.dto.Report;
-import com.wifi.wifiscanner.presentation.Divider;
-import com.wifi.wifiscanner.presentation.network.NetworksAdapter;
-import com.wifi.wifiscanner.rest.RestClient;
 import com.wifi.wifiscanner.storage.DBStorage;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
@@ -63,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
         this.networksRecycler = this.findViewById(R.id.networks_recycler);
         this.networksRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
-        this.mainHandler = new MainHandler(networksRecycler);
+        this.mainHandler = new MainHandler(networksRecycler, this);
         this.mainMessenger = new Messenger(mainHandler);
         this.scanConn = new ScanServiceConnection(this.mainMessenger);
 
@@ -169,5 +164,9 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         this.refreshLayout = findViewById(R.id.refresh_layout);
         this.refreshLayout.setOnRefreshListener(this);
         this.refreshLayout.setProgressViewOffset(false, 0, 200);
+    }
+
+    public void setReport(Report report) {
+        this.report = report;
     }
 }
