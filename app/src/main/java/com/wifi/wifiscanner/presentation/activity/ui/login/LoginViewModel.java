@@ -69,7 +69,7 @@ public class LoginViewModel extends ViewModel {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == SignInTextHttpResponseHandler.AUTHORISATION_RESULT) {
-                String code = msg.getData().getString(SignInTextHttpResponseHandler.AUTHORISATION_ERROR_CODE, AuthorisationResult.ERROR_CODE);
+                String code = msg.getData().getString(SignInTextHttpResponseHandler.AUTHORISATION_RESULT_CODE, AuthorisationResult.ERROR_CODE);
                 loginResult.setValue(AuthorisationResult.from(code));
             }
         }

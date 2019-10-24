@@ -21,9 +21,8 @@ import cz.msebera.android.httpclient.Header;
  */
 public class SignInTextHttpResponseHandler extends BaseTextHttpResponseHandler {
 
-    public static final int AUTHORISATION_RESULT = 1;
+    public static final int AUTHORISATION_RESULT = 12345;
     public static final String AUTHORISATION_RESULT_CODE = "AUTHORISATION_RESULT_CODE";
-    public static final String AUTHORISATION_ERROR_CODE = "AUTHORISATION_ERROR_CODE";
     private AuthorizationStorage authorizationStorage;
     private Messenger messenger;
 

@@ -34,6 +34,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         this.authorizationStorage = new AuthorizationStorage(this);
+        // TODO: чтобы всегда попадать на авторизацию раскоментируй строчку ниже
+        // this.authorizationStorage.logout();
         if (this.authorizationStorage.isAuthorized()) {
             this.toMainActivity();
         }

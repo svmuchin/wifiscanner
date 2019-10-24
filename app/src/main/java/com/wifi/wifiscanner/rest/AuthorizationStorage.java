@@ -32,6 +32,12 @@ public class AuthorizationStorage {
         return this.get() != null;
     }
 
+    public void logout(){
+        SharedPreferences.Editor editor = this.getSharedPreferences().edit();
+        editor.remove(AUTH_TOKEN_KEY);
+        editor.commit();
+    }
+
     private SharedPreferences getSharedPreferences() {
         return this.context.getSharedPreferences(PREFERENCE_KEY, Context.MODE_PRIVATE);
     }

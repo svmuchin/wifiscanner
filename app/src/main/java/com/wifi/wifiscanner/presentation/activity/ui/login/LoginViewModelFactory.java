@@ -5,8 +5,6 @@ import android.arch.lifecycle.ViewModelProvider;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import com.wifi.wifiscanner.presentation.activity.data.LoginDataSource;
-import com.wifi.wifiscanner.presentation.activity.data.LoginRepository;
 import com.wifi.wifiscanner.rest.RestClient;
 
 /**
@@ -26,7 +24,7 @@ public class LoginViewModelFactory implements ViewModelProvider.Factory {
     @SuppressWarnings("unchecked")
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(LoginViewModel.class)) {
-            return (T) new LoginViewModel(new RestClient(this.context)));
+            return (T) new LoginViewModel(new RestClient(this.context));
         } else {
             throw new IllegalArgumentException("Unknown ViewModel class");
         }
