@@ -189,6 +189,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         if (ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             this.serviceScan();
         } else {
+            findViewById(R.id.main_button_scan).setEnabled(false);
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
     }
@@ -252,6 +253,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 this.serviceScan();
             }
         }
+        this.findViewById(R.id.main_button_scan).setEnabled(true);
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
