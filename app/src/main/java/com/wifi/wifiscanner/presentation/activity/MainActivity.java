@@ -56,10 +56,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.restClient = new RestClient(this);
         this.setContentView(R.layout.activity_main);
-        this.initRefreshLayout();
         this.initControlsState();
+        this.restClient = new RestClient(this);
+        this.initRefreshLayout();
         this.networksRecycler = this.findViewById(R.id.networks_recycler);
 
         this.myScanMessenger = new Messenger(new MainHandler());
@@ -186,10 +186,10 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     public void scan() {
+        findViewById(R.id.main_button_scan).setEnabled(false);
         if (ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             this.serviceScan();
         } else {
-            findViewById(R.id.main_button_scan).setEnabled(false);
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
         }
     }
@@ -249,8 +249,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         for (int i = 0; i < permissions.length; i++) {
-            if (Manifest.permission.ACCESS_COARSE_LOCATION.equals(permissions[i]) && grantResults[i] == PackageManager.PERMISSION_GRANTED) {
-                this.serviceScan();
+            if (Manifest.permission.ACCESS_COARSE_LOCATION.equals(permissions[i])) {
+                if (grantResults[i] == PackageManager.PERMISSION_GRANTED) {
+                    this.serviceScan();
+                } else {
+                    findViewById(R.id.main_button_scan).setEnabled(true);
+                }
             }
         }
         this.findViewById(R.id.main_button_scan).setEnabled(true);
@@ -296,15 +300,18 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == ScanService.MSG_REGISTER_RESULT) {
+                Log.d(SCAN_SERVICE_TAG, "MSG_REGISTER_RESULT");
                 findViewById(R.id.main_button_scan).setEnabled(true);
             }
             if (msg.what == ScanService.MSG_SCAN_RESULT) {
+                Log.d(SCAN_SERVICE_TAG, "MSG_SCAN_RESULT");
                 String reportData = msg.getData().getString(ScanService.REPORT_DATA_KEY, "");
                 Report report = Serializer.deserialize(reportData, Report.class);
                 networksRecycler.setAdapter(new NetworksAdapter(report));
                 setReport(report);
                 findViewById(R.id.main_button_send).setEnabled(true);
                 findViewById(R.id.main_button_save).setEnabled(true);
+                findViewById(R.id.main_button_scan).setEnabled(true);
             }
         }
     }

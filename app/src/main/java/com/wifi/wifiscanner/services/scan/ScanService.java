@@ -17,7 +17,6 @@ import android.util.Log;
 
 import com.wifi.wifiscanner.dto.Device;
 import com.wifi.wifiscanner.dto.Report;
-import com.wifi.wifiscanner.dto.StubReport;
 import com.wifi.wifiscanner.util.Constants;
 import com.wifi.wifiscanner.util.Serializer;
 
@@ -47,7 +46,6 @@ public class ScanService extends Service {
         this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
         return scanServiceMessenger.getBinder();
     }
-
 
     public void scan() {
         final Thread thread = new Thread() {
@@ -110,6 +108,7 @@ public class ScanService extends Service {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_REGISTER:
+                    Log.d(Constants.SCAN_SERVICE_TAG, "MSG_REGISTER");
                     clientMessenger = msg.replyTo;
                     Message registerReplyMsg = Message.obtain(null, MSG_REGISTER_RESULT);
                     try {
@@ -119,9 +118,10 @@ public class ScanService extends Service {
                     }
                     break;
                 case MSG_UNREGISTER:
-                    clientMessenger = null;
+                    Log.d(Constants.SCAN_SERVICE_TAG, "MSG_UNREGISTER");
                     break;
                 case MSG_SCAN:
+                    Log.d(Constants.SCAN_SERVICE_TAG, "MSG_SCAN");
                     scan();
                     break;
             }

@@ -192,29 +192,34 @@ public class HistoryService extends Service {
 
     private class IncomingHandler extends Handler {
 
-
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MSG_REGISTER:
+                    Log.d(Constants.HISTORY_TAG, "MSG_REGISTER");
                     register(msg);
                     break;
                 case MSG_UNREGISTER:
-                    activityMessenger = null;
+                    Log.d(Constants.HISTORY_TAG, "MSG_UNREGISTER");
                     break;
                 case MSG_SAVE:
+                    Log.d(Constants.HISTORY_TAG, "MSG_SAVE");
                     save(msg);
                     break;
                 case MSG_GET:
+                    Log.d(Constants.HISTORY_TAG, "MSG_GET");
                     getById(msg);
                     break;
                 case MSG_GET_ALL:
+                    Log.d(Constants.HISTORY_TAG, "MSG_GET_ALL");
                     getAll();
                     break;
                 case MSG_DELETE:
+                    Log.d(Constants.HISTORY_TAG, "MSG_DELETE");
                     delete(msg);
                     break;
                 case MSG_DELETE_ALL:
+                    Log.d(Constants.HISTORY_TAG, "MSG_DELETE_ALL");
                     deleteAll(msg);
                     break;
             }
