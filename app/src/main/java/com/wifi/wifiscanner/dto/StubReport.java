@@ -2,6 +2,7 @@ package com.wifi.wifiscanner.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class StubReport extends Report {
 
@@ -21,18 +22,18 @@ public class StubReport extends Report {
 
     private List<AccessPoint> initResults() {
         ArrayList<AccessPoint> accessPoints = new ArrayList<>();
-        accessPoints.add(initResult("BAC9I_WIFI", "172.173.23.42", 1, 1));
-        accessPoints.add(initResult("PIVNUSHKA_FREE_WIFI", "172.11.228.19", 1, 1));
-        accessPoints.add(initResult("PIVNUSHKA_FREE_WIFI", "172.11.228.19", 2, 2));
-        accessPoints.add(initResult("PIVNUSHKA_FREE_WIFI", "172.11.228.19", 3, 3));
-        accessPoints.add(initResult("PIVNUSHKA_FREE_WIFI", "172.11.228.19", 4, 4));
-        accessPoints.add(initResult("PIVNUSHKA_FREE_WIFI", "172.11.228.19", 5, 5));
-        accessPoints.add(initResult("PIVNUSHKA_FREE_WIFI", "172.11.228.19", 6, 6));
-        accessPoints.add(initResult("BAC9I_WIFI", "172.173.23.42", 2, 2));
-        accessPoints.add(initResult("BAC9I_WIFI", "172.173.23.42", 3, 3));
-        accessPoints.add(initResult("BAC9I_WIFI", "172.173.23.42", 4, 4));
-        accessPoints.add(initResult("BAC9I_WIFI", "172.173.23.42", 5, 5));
-        accessPoints.add(initResult("MIKSHIN_FOREVA", "00:0e:8f:d3:5b:e4", 6, 6));
+        accessPoints.add(initResult(UUID.randomUUID().toString(), "172.173.23.42", 1, 1));
+        accessPoints.add(initResult(UUID.randomUUID().toString(), "172.11.228.19", 1, 1));
+        accessPoints.add(initResult(UUID.randomUUID().toString(), "172.11.228.19", 2, 2));
+        accessPoints.add(initResult(UUID.randomUUID().toString(), "172.11.228.19", 3, 3));
+        accessPoints.add(initResult(UUID.randomUUID().toString(), "172.11.228.19", 4, 4));
+        accessPoints.add(initResult(UUID.randomUUID().toString(), "172.11.228.19", 5, 5));
+        accessPoints.add(initResult(UUID.randomUUID().toString(), "172.11.228.19", 6, 6));
+        accessPoints.add(initResult(UUID.randomUUID().toString(), "172.173.23.42", 2, 2));
+        accessPoints.add(initResult(UUID.randomUUID().toString(), "172.173.23.42", 3, 3));
+        accessPoints.add(initResult(UUID.randomUUID().toString(), "172.173.23.42", 4, 4));
+        accessPoints.add(initResult(UUID.randomUUID().toString(), "172.173.23.42", 5, 5));
+        accessPoints.add(initResult(UUID.randomUUID().toString(), "00:0e:8f:d3:5b:e4", 6, 6));
         return accessPoints;
     }
 

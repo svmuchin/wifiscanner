@@ -17,7 +17,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -29,31 +28,32 @@ import com.wifi.wifiscanner.dto.Reports;
 import com.wifi.wifiscanner.presentation.Divider;
 import com.wifi.wifiscanner.presentation.network.NetworksAdapter;
 import com.wifi.wifiscanner.rest.RestClient;
-import com.wifi.wifiscanner.services.handler.MainHandler;
 import com.wifi.wifiscanner.services.history.HistoryService;
-import com.wifi.wifiscanner.services.history.HistoryServiceConnection;
 import com.wifi.wifiscanner.services.scan.ScanService;
-import com.wifi.wifiscanner.services.scan.ScanServiceConnection;
 import com.wifi.wifiscanner.util.Constants;
 import com.wifi.wifiscanner.util.Serializer;
 
 import static android.Manifest.permission.ACCESS_COARSE_LOCATION;
 import static com.wifi.wifiscanner.util.Constants.HISTORY_TAG;
+import static com.wifi.wifiscanner.util.Constants.SCAN_SERVICE_TAG;
 
 public class MainActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
 
     private RecyclerView networksRecycler;
 
     public Report report = new Report();
-    private Messenger scanMessenger;
+
+    private Messenger scanSericeMessanger;
+    private Messenger myScanMessenger;
+
     private SwipeRefreshLayout refreshLayout;
     private RestClient restClient;
-    private ScanServiceConnection scanConn;
-    private MainHandler scanHandler;
+    private ServiceConnection scanConn;
     private NetworksAdapter networksAdapter;
     private ServiceConnection historyServiceConnection;
+
     private Messenger historyServiceMessenger;
-    private Messenger myMessenger;
+    private Messenger myHistoryMessenger;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,19 +64,35 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         this.initControlsState();
         this.networksRecycler = this.findViewById(R.id.networks_recycler);
 
-        this.networksRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));;
-        this.scanHandler = new MainHandler(networksRecycler, this);
-        this.scanMessenger = new Messenger(scanHandler);
-        this.scanConn = new ScanServiceConnection(this.scanMessenger);
+        this.networksRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
+        this.myScanMessenger = new Messenger(new MainHandler());
+        this.scanConn = new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                scanSericeMessanger = new Messenger(service);
+                Message msg = Message.obtain(null, ScanService.MSG_REGISTER);
+                msg.replyTo = myScanMessenger;
+                try {
+                    scanSericeMessanger.send(msg);
+                } catch (RemoteException ex) {
+                    Log.e(SCAN_SERVICE_TAG, ex.getMessage(), ex);
+                }
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                scanSericeMessanger = null;
+            }
+        };
 
         this.setAdapter(this.report);
-        this.myMessenger = new Messenger(new IncomingHandler());
+        this.myHistoryMessenger = new Messenger(new IncomingHandler());
         this.historyServiceConnection = new ServiceConnection() {
             @Override
             public void onServiceConnected(ComponentName name, IBinder service) {
                 historyServiceMessenger = new Messenger(service);
                 Message msg = Message.obtain(null, HistoryService.MSG_REGISTER);
-                msg.replyTo = myMessenger;
+                msg.replyTo = myHistoryMessenger;
                 try {
                     historyServiceMessenger.send(msg);
                 } catch (RemoteException ex) {
@@ -101,8 +117,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     protected void onResume() {
         super.onResume();
         this.setAdapter(this.report);
+
+        findViewById(R.id.main_button_scan).setEnabled(false);
+
         Intent historyServiceIntent = new Intent(this, HistoryService.class);
         bindService(historyServiceIntent, this.historyServiceConnection, BIND_AUTO_CREATE);
+
+        Intent scanServiceIntent = new Intent(this, ScanService.class);
+        bindService(scanServiceIntent, scanConn, BIND_AUTO_CREATE);
     }
 
     @Override
@@ -129,8 +151,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
 
     public void handleOnSend(View v) {
         if (this.hasReport(report)) {
-            this.restClient.sendReport(this.report);
             findViewById(R.id.main_button_send).setEnabled(false);
+            this.restClient.sendReport(this.report);
             Toast.makeText(this, "Отчёт отправлен.", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Отчёт пуст.", Toast.LENGTH_SHORT).show();
@@ -161,6 +183,15 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         }
         this.unbindService(this.historyServiceConnection);
         this.stopService(new Intent(this, HistoryService.class));
+
+        msg = Message.obtain(null, ScanService.MSG_UNREGISTER);
+        try {
+            this.scanSericeMessanger.send(msg);
+        } catch (RemoteException ex) {
+            Log.e(Constants.NET_SCAN_TAG, ex.getMessage(), ex);
+        }
+        this.unbindService(this.scanConn);
+        this.stopService(new Intent(this, ScanService.class));
     }
 
     public void scan() {
@@ -184,11 +215,12 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     }
 
     private void serviceScan() {
-        this.scanHandler.invalidate();
-        this.findViewById(R.id.main_button_send).setEnabled(true);
-        this.findViewById(R.id.main_button_save).setEnabled(true);
-        Intent scanServiceIntent = new Intent(this, ScanService.class);
-        bindService(scanServiceIntent, scanConn, BIND_AUTO_CREATE);
+        Message msg = Message.obtain(null, ScanService.MSG_SCAN);
+        try {
+            this.scanSericeMessanger.send(msg);
+        } catch (RemoteException ex) {
+            Log.e(Constants.HISTORY_TAG, ex.getMessage(), ex);
+        }
     }
 
     public void handleOnScan(View view) {
@@ -259,6 +291,24 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 if (reports != null && reports.getReports() != null && !reports.getReports().isEmpty()) {
                     findViewById(R.id.main_button_history).setEnabled(true);
                 }
+            }
+        }
+    }
+
+    public class MainHandler extends Handler {
+
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == ScanService.MSG_REGISTER_RESULT) {
+                findViewById(R.id.main_button_scan).setEnabled(true);
+            }
+            if (msg.what == ScanService.MSG_SCAN_RESULT) {
+                String reportData = msg.getData().getString(ScanService.REPORT_DATA_KEY, "");
+                Report report = Serializer.deserialize(reportData, Report.class);
+                networksRecycler.setAdapter(new NetworksAdapter(report));
+                setReport(report);
+                findViewById(R.id.main_button_send).setEnabled(true);
+                findViewById(R.id.main_button_save).setEnabled(true);
             }
         }
     }

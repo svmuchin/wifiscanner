@@ -7,6 +7,7 @@ import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
@@ -17,83 +18,52 @@ import android.util.Log;
 import com.wifi.wifiscanner.dto.Device;
 import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.dto.StubReport;
-import com.wifi.wifiscanner.services.handler.ScanHandler;
 import com.wifi.wifiscanner.util.Constants;
 import com.wifi.wifiscanner.util.Serializer;
 
 import java.net.NetworkInterface;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 
 public class ScanService extends Service {
 
-    public static final String REPORT_DATA = "com.wifi.wifiscanner.services.scan";
+    public static final String REPORT_DATA_KEY = "com.wifi.wifiscanner.services.scan";
+    public static final int MSG_SCAN_RESULT = 1;
+    public static final int MSG_REGISTER = 2;
+    public static final int MSG_UNREGISTER = 3;
+    public static final int MSG_SCAN = 4;
+    public static final int MSG_REGISTER_RESULT = 5;
+    private static final int MSG_UNREGISTER_RESULT = 6;
 
     private WifiManager wifiManager;
-    private Report report;
-    private TimerTask task;
-    private Timer timer = new Timer();
-    private List<Messenger> clientMessengers = new ArrayList<>();
-    private final ScanHandler scanHandler = new ScanHandler(clientMessengers);
-    private Messenger scanServiceMessenger = new Messenger(scanHandler);
+    private Messenger clientMessenger;
+    private Messenger scanServiceMessenger = new Messenger(new ScanHandler());
 
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(Constants.SCAN_SERVICE_TAG, " onStartCommand");
         this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        this.scan();
         return scanServiceMessenger.getBinder();
     }
 
-    @Override
-    public void onCreate() {
-        Log.d(Constants.SCAN_SERVICE_TAG, " onCreate");
-        super.onCreate();
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(Constants.SCAN_SERVICE_TAG, " onStartCommand");
-        this.wifiManager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
-        this.scan();
-        return super.onStartCommand(intent, flags, startId);
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.d(Constants.SCAN_SERVICE_TAG, " onDestroy");
-        super.onDestroy();
-    }
-
-    public Report getReport() {
-        return report;
-    }
 
     public void scan() {
-        if (task != null) {
-            task.cancel();
-        }
-        task = new TimerTask() {
+        final Thread thread = new Thread() {
             @Override
             public void run() {
                 wifiManager.startScan();
-                // report = new Report(wifiManager.getScanResults(), this.createDevice(wifiManager.getConnectionInfo()));
-                report = new StubReport();
-                Message msg = Message.obtain(scanHandler);
+                Report report = new Report(wifiManager.getScanResults(), this.createDevice(wifiManager.getConnectionInfo()));
+                // Report report = new StubReport();
+                Message msg = Message.obtain(null, MSG_SCAN_RESULT);
                 Bundle bundle = new Bundle();
-                bundle.putString(REPORT_DATA, Serializer.serialize(report));
+                bundle.putString(REPORT_DATA_KEY, Serializer.serialize(report));
                 msg.setData(bundle);
-                for (Messenger clientMessenger : clientMessengers) {
-                    try {
-                        clientMessenger.send(msg);
-                    } catch (RemoteException ex) {
-                        ex.printStackTrace();
-                    }
+                try {
+                    clientMessenger.send(msg);
+                } catch (RemoteException ex) {
+                    ex.printStackTrace();
                 }
                 Log.d(ScanService.class.getName(), report.toString());
             }
@@ -132,6 +102,29 @@ public class ScanService extends Service {
                 return "";
             }
         };
-        timer.schedule(task, 0, 5000);
+        thread.start();
+    }
+
+    public class ScanHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_REGISTER:
+                    clientMessenger = msg.replyTo;
+                    Message registerReplyMsg = Message.obtain(null, MSG_REGISTER_RESULT);
+                    try {
+                        clientMessenger.send(registerReplyMsg);
+                    } catch (RemoteException ex) {
+                        ex.printStackTrace();
+                    }
+                    break;
+                case MSG_UNREGISTER:
+                    clientMessenger = null;
+                    break;
+                case MSG_SCAN:
+                    scan();
+                    break;
+            }
+        }
     }
 }
