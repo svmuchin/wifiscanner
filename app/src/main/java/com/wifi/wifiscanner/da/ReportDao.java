@@ -28,4 +28,7 @@ public interface ReportDao {
 
   @Delete
   void delete(ReportEntity report);
+
+  @Query("DELETE FROM reportentity")
+  void deleteAll();
 }

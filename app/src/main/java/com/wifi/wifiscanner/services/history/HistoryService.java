@@ -41,6 +41,8 @@ public class HistoryService extends Service {
     public static final int MSG_GET_ALL = 8;
     public static final int MSG_UNREGISTER = 9;
     public static final int MSG_REGISTER_RESULT = 10;
+    public static final int MSG_DELETE_ALL = 12;
+    public static final int MSG_DELETE_ALL_RESULT_KEY = 13;
 
     private ReportDatabase reportDatabase;
     private ReportDao dao;
@@ -95,6 +97,23 @@ public class HistoryService extends Service {
                 Bundle outputData = new Bundle();
                 outputData.putString(REPORTS_KEY, Serializer.serialize(reports));
                 replyMsg.setData(outputData);
+                try {
+                    activityMessenger.send(replyMsg);
+                } catch (RemoteException ex) {
+                    Log.e(Constants.DELETE_TAG, ex.getMessage(), ex);
+                }
+                this.interrupt();
+            }
+        };
+        thread.start();
+    }
+
+    private void deleteAll(Message msg) {
+        final Thread thread = new Thread() {
+            @Override
+            public void run() {
+                dao.deleteAll();
+                Message replyMsg = Message.obtain(null, MSG_DELETE_ALL_RESULT_KEY);
                 try {
                     activityMessenger.send(replyMsg);
                 } catch (RemoteException ex) {
@@ -190,6 +209,9 @@ public class HistoryService extends Service {
                     break;
                 case DELETE:
                     delete(msg);
+                    break;
+                case MSG_DELETE_ALL:
+                    deleteAll(msg);
                     break;
             }
         }
