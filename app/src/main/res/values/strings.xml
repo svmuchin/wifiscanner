@@ -29,8 +29,8 @@
     <string name="invalid_username">Некорректный email</string>
     <string name="invalid_password">Пароль должен быть больше 5 символов</string>
     <string name="login_failed">"Ошибка входа"</string>
-    <string name="upload_speed_text">Скорость назад</string>
-    <string name="download_speed_text">Скорость взад</string>
+    <string name="upload_speed_text">Отправка</string>
+    <string name="download_speed_text">Получение</string>
     <string name="title_activity_test">Проверка сети</string>
     <string name="clear_history_text">Очистить историю</string>
 </resources>

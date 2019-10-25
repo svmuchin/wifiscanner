@@ -1,26 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".presentation.activity.TestActivity">
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/test_button_scan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:contentDescription="@string/start_test_button_tooltip"
-        android:onClick="handleOnStartTest"
-        android:scaleType="fitXY"
-        android:scaleX="3"
-        android:scaleY="3"
-        android:src="@drawable/ic_network_check_white_48dp"
-        android:tooltipText="@string/start_test_button_tooltip"
-        app:layout_constraintBottom_toBottomOf="@id/test_guideline_bottom"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
 
     <ProgressBar
         android:id="@+id/testing"
@@ -33,65 +17,83 @@
         android:layout_marginBottom="64dp"
         android:indeterminateTint="@color/colorPrimary"
         android:visibility="gone"
+        android:scaleX="2"
+        android:scaleY="2"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.3" />
 
-    <TextView
-        android:id="@+id/downloadSpeedTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="@string/download_speed_text"
-        android:textSize="22sp"
-        app:layout_constraintRight_toRightOf="@id/test_guideline_center"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/downloadSpeedValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:text="0"
-        android:textSize="22sp"
-        app:layout_constraintLeft_toRightOf="@id/downloadSpeedTitle"
-        app:layout_constraintTop_toTopOf="@id/downloadSpeedTitle" />
-
-    <TextView
-        android:id="@+id/uploadSpeedTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/upload_speed_text"
-        android:textSize="22sp"
-        app:layout_constraintRight_toRightOf="@id/test_guideline_center"
-        app:layout_constraintTop_toBottomOf="@id/downloadSpeedTitle" />
-
-    <TextView
-        android:id="@+id/uploadSpeedValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:text="0"
-        android:textSize="22sp"
-        app:layout_constraintLeft_toRightOf="@id/uploadSpeedTitle"
-        app:layout_constraintTop_toTopOf="@id/uploadSpeedTitle" />
-
-
-    <android.support.constraint.Guideline
-        android:id="@+id/test_guideline_center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+        android:paddingTop="32dp">
 
-    <android.support.constraint.Guideline
-        android:id="@+id/test_guideline_bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_end="?attr/actionBarSize" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
 
-</android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/downloadSpeedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/download_speed_text"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/downloadSpeedValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="0"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/uploadSpeedTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/upload_speed_text"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/uploadSpeedValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:text="0"
+                android:textSize="24sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="48dp"
+            android:gravity="bottom|center">
+
+            <ImageButton
+                android:id="@+id/test_button_scan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:backgroundTint="@color/colorPrimary"
+                android:contentDescription="@string/start_test_button_tooltip"
+                android:onClick="handleOnStartTest"
+                android:scaleX="2"
+                android:scaleY="2"
+                android:src="@drawable/ic_network_check_white_48dp"
+                android:tooltipText="@string/start_test_button_tooltip" />
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
