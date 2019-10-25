@@ -23,7 +23,7 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 
 public class RestClient {
 
-    private static final String BASE_URL = "http://172.30.14.77:3000/";
+    private static final String BASE_URL = "https://wifi-scanner-server.herokuapp.com/";
     private static final String APPLICATION_JSON = "application/json";
     private static final String APPLICATION_OCTET_STREAM = "application/octet-stream";
     private static final String SIGN_UP_URL = BASE_URL + "sign-in/";
