@@ -65,14 +65,28 @@ public class ShowActivity extends AppCompatActivity {
                 historyServiceMessenger = null;
             }
         };
-        Intent historyServiceIntent = new Intent(this, HistoryService.class);
-        bindService(historyServiceIntent, this.historyServiceConnection, BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         this.showRecycler.setAdapter(new NetworksAdapter(this.report));
+        Intent historyServiceIntent = new Intent(this, HistoryService.class);
+        bindService(historyServiceIntent, this.historyServiceConnection, BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Message msg = Message.obtain(null, HistoryService.MSG_UNREGISTER);
+        msg.replyTo = this.myMessenger;
+        try {
+            this.historyServiceMessenger.send(msg);
+        } catch (RemoteException ex) {
+            Log.e(Constants.HISTORY_TAG, ex.getMessage(), ex);
+        }
+        this.unbindService(this.historyServiceConnection);
+        this.stopService(new Intent(this, HistoryService.class));
     }
 
     @Override

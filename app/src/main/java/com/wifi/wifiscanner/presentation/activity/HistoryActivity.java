@@ -60,6 +60,11 @@ public class HistoryActivity extends AppCompatActivity implements OnReportClickL
                 serviceMessenger = null;
             }
         };
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         Intent historyServiceIntent = new Intent(this, HistoryService.class);
         bindService(historyServiceIntent, this.historyServiceConnection, BIND_AUTO_CREATE);
     }
@@ -79,8 +84,8 @@ public class HistoryActivity extends AppCompatActivity implements OnReportClickL
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         Message msg = Message.obtain(null, HistoryService.MSG_UNREGISTER);
         msg.replyTo = this.myMessenger;
         try {

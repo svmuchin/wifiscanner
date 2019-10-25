@@ -89,8 +89,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                 historyServiceMessenger = null;
             }
         };
-        Intent historyServiceIntent = new Intent(this, HistoryService.class);
-        bindService(historyServiceIntent, this.historyServiceConnection, BIND_AUTO_CREATE);
     }
 
     private void initControlsState() {
@@ -103,22 +101,14 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     protected void onResume() {
         super.onResume();
         this.setAdapter(this.report);
-
+        Intent historyServiceIntent = new Intent(this, HistoryService.class);
+        bindService(historyServiceIntent, this.historyServiceConnection, BIND_AUTO_CREATE);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         stopService(new Intent(this, ScanService.class));
-
-        Message msg = Message.obtain(null, HistoryService.MSG_UNREGISTER);
-        try {
-            this.historyServiceMessenger.send(msg);
-        } catch (RemoteException ex) {
-            Log.e(Constants.HISTORY_TAG, ex.getMessage(), ex);
-        }
-        this.unbindService(this.historyServiceConnection);
-        this.stopService(new Intent(this, HistoryService.class));
     }
 
     @Override
@@ -158,6 +148,19 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         } catch (RemoteException ex) {
             Log.e(Constants.GET_TAG, ex.getMessage(), ex);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Message msg = Message.obtain(null, HistoryService.MSG_UNREGISTER);
+        try {
+            this.historyServiceMessenger.send(msg);
+        } catch (RemoteException ex) {
+            Log.e(Constants.HISTORY_TAG, ex.getMessage(), ex);
+        }
+        this.unbindService(this.historyServiceConnection);
+        this.stopService(new Intent(this, HistoryService.class));
     }
 
     public void scan() {
