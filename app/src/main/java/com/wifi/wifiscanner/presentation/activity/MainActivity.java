@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         this.findViewById(R.id.main_button_send).setEnabled(false);
         this.findViewById(R.id.main_button_save).setEnabled(false);
         this.findViewById(R.id.main_button_history).setEnabled(false);
+        this.findViewById(R.id.main_button_scan).setEnabled(false);
     }
 
     @Override
@@ -226,7 +227,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     public void onRefresh() {
         this.refreshLayout.setRefreshing(true);
         initControlsState();
-        findViewById(R.id.main_button_scan).setEnabled(false);
         findViewById(R.id.main_button_test).setEnabled(false);
         this.refreshLayout.postDelayed(new Runnable() {
             @Override
