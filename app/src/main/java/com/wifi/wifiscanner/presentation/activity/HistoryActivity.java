@@ -3,22 +3,25 @@ package com.wifi.wifiscanner.presentation.activity;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.Messenger;
 import android.os.RemoteException;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
 
 import com.wifi.wifiscanner.R;
 import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.dto.Reports;
-import com.wifi.wifiscanner.presentation.Divider;
 import com.wifi.wifiscanner.presentation.OnReportClickListener;
 import com.wifi.wifiscanner.presentation.history.HistoryAdapter;
 import com.wifi.wifiscanner.services.history.HistoryService;
@@ -38,9 +41,8 @@ public class HistoryActivity extends AppCompatActivity implements OnReportClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        this.historyRecycler = this.findViewById(R.id.history_recycler);
-        this.historyRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
-        this.historyRecycler.setAdapter(new HistoryAdapter(new ArrayList<Report>(), this));
+        this.initRecyclerView();
+
         this.myMessenger = new Messenger(new IncomingHandler());
         this.historyServiceConnection = new ServiceConnection() {
             @Override
@@ -95,6 +97,50 @@ public class HistoryActivity extends AppCompatActivity implements OnReportClickL
         }
         this.unbindService(this.historyServiceConnection);
         this.stopService(new Intent(this, HistoryService.class));
+    }
+
+    private void initRecyclerView() {
+        this.historyRecycler = this.findViewById(R.id.history_recycler);
+//        this.historyRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
+        final HistoryAdapter adapter = new HistoryAdapter(new ArrayList<Report>(), this);
+        this.historyRecycler.setAdapter(adapter);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+                Report report = adapter.getReports().get(viewHolder.getAdapterPosition());
+                Message message = Message.obtain(null, HistoryService.MSG_DELETE);
+                Bundle data = new Bundle();
+                data.putString(HistoryService.REPORT_KEY, Serializer.serialize(report));
+                message.setData(data);
+                try {
+                    serviceMessenger.send(message);
+                } catch (RemoteException e) {
+                    Log.e(Constants.HISTORY_TAG, e.getMessage(), e);
+                }
+                adapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+            }
+
+            @Override
+            public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                Drawable trashBin = getDrawable(R.drawable.ic_delete_black_24dp);
+
+                c.clipRect(0, viewHolder.itemView.getTop(), dX, viewHolder.itemView.getBottom());
+
+                int textMargin = Math.round(recyclerView.getResources().getDimension(R.dimen.text_margin));
+
+                trashBin.setBounds(new Rect(textMargin, viewHolder.itemView.getTop() + textMargin,
+                        textMargin + trashBin.getIntrinsicWidth(), viewHolder.itemView.getTop() + trashBin.getIntrinsicHeight() + textMargin));
+
+                trashBin.draw(c);
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+        });
+        touchHelper.attachToRecyclerView(historyRecycler);
     }
 
     private class IncomingHandler extends Handler {

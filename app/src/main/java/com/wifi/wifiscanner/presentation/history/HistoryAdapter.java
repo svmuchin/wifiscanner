@@ -54,4 +54,8 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryItemHolder> impl
     public void setReports(List<Report> reports) {
         this.reports = reports;
     }
+
+    public List<Report> getReports() {
+        return reports;
+    }
 }

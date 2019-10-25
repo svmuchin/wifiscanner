@@ -1,81 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
-    <TextView
-        android:id="@+id/history_item_created_date_title"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="@string/history_item_create_date_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/history_item_created_date_value"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/history_item_bottom_guideline"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintVertical_bias="0.5"
-        tools:text="Дата:" />
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/history_item_created_date_value"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/history_item_created_date_title"
-        app:layout_constraintEnd_toStartOf="@+id/history_item_middle_guideline"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/history_item_bottom_guideline"
-        app:layout_constraintHorizontal_bias="0"
-        tools:text="01.01.2021" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="8dp">
 
-    <TextView
-        android:id="@+id/history_item_created_time_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:text="@string/history_item_create_time_text"
-        app:layout_constraintStart_toEndOf="@+id/history_item_middle_guideline"
-        app:layout_constraintEnd_toStartOf="@+id/history_item_created_time_value"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/history_item_bottom_guideline"
-        app:layout_constraintHorizontal_bias="0"
-        tools:text="Время:" />
+            <TextView
+                android:id="@+id/history_item_created_date_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/history_item_create_date_text"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="Дата:" />
 
-    <TextView
-        android:id="@+id/history_item_created_time_value"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/history_item_created_time_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/history_item_bottom_guideline"
-        app:layout_constraintHorizontal_bias="0"
-        tools:text="17:44" />
+            <TextView
+                android:id="@+id/history_item_created_date_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textAlignment="textEnd"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="01.01.2021" />
+        </LinearLayout>
 
-    <android.support.constraint.Guideline
-        android:id="@+id/history_item_bottom_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="60dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:padding="8dp">
 
-    <android.support.constraint.Guideline
-        android:id="@+id/history_item_middle_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
+            <TextView
+                android:id="@+id/history_item_created_time_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/history_item_create_time_text"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="Время:" />
 
-</android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/history_item_created_time_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:textAlignment="textEnd"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="17:44" />
+        </LinearLayout>
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

@@ -26,8 +26,8 @@ public interface ReportDao {
   @Update
   void update(ReportEntity report);
 
-  @Delete
-  void delete(ReportEntity report);
+  @Query("DELETE from reportentity where reportId = :reportId")
+  void delete(String reportId);
 
   @Query("DELETE FROM reportentity")
   void deleteAll();

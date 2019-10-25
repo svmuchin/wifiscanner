@@ -23,8 +23,6 @@ import com.wifi.wifiscanner.util.Serializer;
 import java.util.ArrayList;
 import java.util.List;
 
-import static android.os.FileObserver.DELETE;
-
 public class HistoryService extends Service {
 
     public static final String REPORT_KEY = "REPORT_KEY";
@@ -41,6 +39,7 @@ public class HistoryService extends Service {
     public static final int MSG_GET_ALL = 8;
     public static final int MSG_UNREGISTER = 9;
     public static final int MSG_REGISTER_RESULT = 10;
+    public static final int MSG_DELETE = 11;
     public static final int MSG_DELETE_ALL = 12;
     public static final int MSG_DELETE_ALL_RESULT_KEY = 13;
 
@@ -90,7 +89,7 @@ public class HistoryService extends Service {
         final Thread thread = new Thread() {
             @Override
             public void run() {
-                dao.delete(new ReportEntity(Serializer.deserialize(inputData, Report.class)));
+                dao.delete(Serializer.deserialize(inputData, Report.class).getId());
                 List<ReportEntity> results = dao.getAll();
                 Reports reports = toReports(results);
                 Message replyMsg = Message.obtain(null, MSG_DELETE_RESULT_KEY);
@@ -207,7 +206,7 @@ public class HistoryService extends Service {
                 case MSG_GET_ALL:
                     getAll();
                     break;
-                case DELETE:
+                case MSG_DELETE:
                     delete(msg);
                     break;
                 case MSG_DELETE_ALL:
