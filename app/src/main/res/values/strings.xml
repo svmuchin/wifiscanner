@@ -32,4 +32,5 @@
     <string name="upload_speed_text">Скорость назад</string>
     <string name="download_speed_text">Скорость взад</string>
     <string name="title_activity_test">Проверка сети</string>
+    <string name="clear_history_text">Очистить историю</string>
 </resources>

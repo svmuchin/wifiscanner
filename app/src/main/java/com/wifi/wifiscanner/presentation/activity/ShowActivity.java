@@ -11,15 +11,12 @@ import android.os.Messenger;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
 import com.wifi.wifiscanner.R;
 import com.wifi.wifiscanner.dto.Report;
-import com.wifi.wifiscanner.presentation.Divider;
 import com.wifi.wifiscanner.presentation.network.NetworksAdapter;
 import com.wifi.wifiscanner.rest.RestClient;
 import com.wifi.wifiscanner.services.history.HistoryService;
@@ -42,7 +39,6 @@ public class ShowActivity extends AppCompatActivity {
         setContentView(R.layout.activity_show);
         this.restClient = new RestClient(this);
         this.showRecycler = this.findViewById(R.id.show_recycler);
-        this.showRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
         this.myMessenger = new Messenger(new IncomingHandler());
         this.findViewById(R.id.show_button_send).setEnabled(false);
 
@@ -86,13 +82,6 @@ public class ShowActivity extends AppCompatActivity {
         }
         this.unbindService(this.historyServiceConnection);
         this.stopService(new Intent(this, HistoryService.class));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        this.getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     public void handleOnSend(View v) {

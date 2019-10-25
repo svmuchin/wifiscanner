@@ -18,14 +18,12 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
 
 import com.wifi.wifiscanner.R;
 import com.wifi.wifiscanner.dto.Report;
 import com.wifi.wifiscanner.dto.Reports;
-import com.wifi.wifiscanner.presentation.Divider;
 import com.wifi.wifiscanner.presentation.network.NetworksAdapter;
 import com.wifi.wifiscanner.rest.RestClient;
 import com.wifi.wifiscanner.services.history.HistoryService;
@@ -64,7 +62,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         this.initControlsState();
         this.networksRecycler = this.findViewById(R.id.networks_recycler);
 
-        this.networksRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
         this.myScanMessenger = new Messenger(new MainHandler());
         this.scanConn = new ServiceConnection() {
             @Override
@@ -131,13 +128,6 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     protected void onDestroy() {
         super.onDestroy();
         stopService(new Intent(this, ScanService.class));
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        this.getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
     }
 
     public void handleOnSave(View v) {
@@ -219,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         try {
             this.scanSericeMessanger.send(msg);
         } catch (RemoteException ex) {
-            Log.e(Constants.HISTORY_TAG, ex.getMessage(), ex);
+            Log.e(SCAN_SERVICE_TAG, ex.getMessage(), ex);
         }
     }
 
@@ -235,11 +225,16 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
     @Override
     public void onRefresh() {
         this.refreshLayout.setRefreshing(true);
+        initControlsState();
+        findViewById(R.id.main_button_scan).setEnabled(false);
+        findViewById(R.id.main_button_test).setEnabled(false);
         this.refreshLayout.postDelayed(new Runnable() {
             @Override
             public void run() {
                 scan();
                 refreshLayout.setRefreshing(false);
+                findViewById(R.id.main_button_scan).setEnabled(true);
+                findViewById(R.id.main_button_test).setEnabled(true);
             }
         }, 1000);
     }
@@ -288,9 +283,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
             if (msg.what == HistoryService.MSG_GET_ALL_RESULT_KEY) {
                 String inputData = msg.getData().getString(HistoryService.REPORTS_KEY);
                 Reports reports = Serializer.deserialize(inputData, Reports.class);
-                if (reports != null && reports.getReports() != null && !reports.getReports().isEmpty()) {
-                    findViewById(R.id.main_button_history).setEnabled(true);
-                }
+                boolean shouldDisableHistory = reports != null && reports.getReports() != null && !reports.getReports().isEmpty();
+                findViewById(R.id.main_button_history).setEnabled(shouldDisableHistory);
             }
         }
     }

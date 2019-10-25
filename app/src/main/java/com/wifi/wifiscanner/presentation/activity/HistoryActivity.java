@@ -18,6 +18,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import com.wifi.wifiscanner.R;
 import com.wifi.wifiscanner.dto.Report;
@@ -74,7 +75,7 @@ public class HistoryActivity extends AppCompatActivity implements OnReportClickL
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        this.getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.getMenuInflater().inflate(R.menu.menu_history, menu);
         return true;
     }
 
@@ -101,7 +102,6 @@ public class HistoryActivity extends AppCompatActivity implements OnReportClickL
 
     private void initRecyclerView() {
         this.historyRecycler = this.findViewById(R.id.history_recycler);
-//        this.historyRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
         final HistoryAdapter adapter = new HistoryAdapter(new ArrayList<Report>(), this);
         this.historyRecycler.setAdapter(adapter);
         ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -143,6 +143,15 @@ public class HistoryActivity extends AppCompatActivity implements OnReportClickL
         touchHelper.attachToRecyclerView(historyRecycler);
     }
 
+    public void handleDeleteAll(MenuItem item) {
+        Message message = Message.obtain(null, HistoryService.MSG_DELETE_ALL);
+        try {
+            this.serviceMessenger.send(message);
+        } catch (RemoteException ex) {
+            Log.e(Constants.HISTORY_TAG, ex.getMessage(), ex);
+        }
+    }
+
     private class IncomingHandler extends Handler {
 
         @Override
@@ -156,7 +165,8 @@ public class HistoryActivity extends AppCompatActivity implements OnReportClickL
                 }
             }
             if (msg.what == HistoryService.MSG_GET_ALL_RESULT_KEY ||
-                    msg.what == HistoryService.MSG_DELETE_RESULT_KEY) {
+                    msg.what == HistoryService.MSG_DELETE_RESULT_KEY ||
+                    msg.what == HistoryService.MSG_DELETE_ALL_RESULT_KEY) {
                 String inputData = msg.getData().getString(HistoryService.REPORTS_KEY);
                 Reports reports = Serializer.deserialize(inputData, Reports.class);
                 HistoryAdapter adapter = (HistoryAdapter) historyRecycler.getAdapter();

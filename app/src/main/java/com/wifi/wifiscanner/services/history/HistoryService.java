@@ -113,6 +113,11 @@ public class HistoryService extends Service {
             public void run() {
                 dao.deleteAll();
                 Message replyMsg = Message.obtain(null, MSG_DELETE_ALL_RESULT_KEY);
+                Bundle outputData = new Bundle();
+                List<ReportEntity> results = dao.getAll();
+                Reports reports = toReports(results);
+                outputData.putString(REPORTS_KEY, Serializer.serialize(reports));
+                replyMsg.setData(outputData);
                 try {
                     activityMessenger.send(replyMsg);
                 } catch (RemoteException ex) {
