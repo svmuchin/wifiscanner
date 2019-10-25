@@ -63,28 +63,25 @@ public class HistoryService extends Service {
     }
 
     private void save(Message msg) {
-        String inputData = msg.getData().getString(REPORT_KEY);
-        Report report = Serializer.deserialize(inputData, Report.class);
-        insert(report);
-        Message replyMsg = Message.obtain(null, MSG_SAVE_RESULT_KEY);
-        try {
-            activityMessenger.send(replyMsg);
-        } catch (RemoteException ex) {
-            Log.e(Constants.SAVE_TAG, ex.getMessage(), ex);
-        }
-    }
-
-    public void insert(final Report report) {
+        final String inputData = msg.getData().getString(REPORT_KEY);
         final Thread thread = new Thread() {
             @Override
             public void run() {
+                Report report = Serializer.deserialize(inputData, Report.class);
                 ReportEntity entity = new ReportEntity(report);
                 dao.insert(entity);
+                Message replyMsg = Message.obtain(null, MSG_SAVE_RESULT_KEY);
+                try {
+                    activityMessenger.send(replyMsg);
+                } catch (RemoteException ex) {
+                    Log.e(Constants.SAVE_TAG, ex.getMessage(), ex);
+                }
                 this.interrupt();
             }
         };
         thread.start();
     }
+
 
     private void delete(Message msg) {
         final String inputData = msg.getData().getString(REPORT_KEY);
@@ -114,8 +111,7 @@ public class HistoryService extends Service {
         final Thread thread = new Thread() {
             @Override
             public void run() {
-                // TODO: FIX ME!!!!!
-                Report report = dao.getById(1L).getReport();
+                Report report = dao.getById(reportId).getReport();
                 Message replyMsg = Message.obtain(null, MSG_GET_RESULT_KEY);
                 Bundle outputData = new Bundle();
                 outputData.putString(REPORT_KEY, Serializer.serialize(report));
@@ -151,6 +147,7 @@ public class HistoryService extends Service {
         };
         thread.start();
     }
+
     private Reports toReports(List<ReportEntity> results) {
         ArrayList<Report> reports = new ArrayList<>();
         for (ReportEntity result : results) {

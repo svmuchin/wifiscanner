@@ -12,11 +12,14 @@ public class ReportEntity {
   @PrimaryKey(autoGenerate = true)
   public long id;
 
+  public String reportId;
+
   @TypeConverters({ReportConverter.class})
   public Report report;
 
   public ReportEntity(Report report) {
     this.report = report;
+    this.reportId = report.getId();
   }
 
   public long getId() {
@@ -33,5 +36,13 @@ public class ReportEntity {
 
   public void setReport(Report report) {
     this.report = report;
+  }
+
+  public String getReportId() {
+    return reportId;
+  }
+
+  public void setReportId(String reportId) {
+    this.reportId = reportId;
   }
 }

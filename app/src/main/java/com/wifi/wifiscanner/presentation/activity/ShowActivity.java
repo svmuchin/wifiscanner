@@ -41,7 +41,6 @@ public class ShowActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show);
         this.restClient = new RestClient(this);
-        this.setSupportActionBar((Toolbar) this.findViewById(R.id.show_toolbar));
         this.showRecycler = this.findViewById(R.id.show_recycler);
         this.showRecycler.addItemDecoration(new Divider(this, R.drawable.green_divider));
         this.myMessenger = new Messenger(new IncomingHandler());
@@ -128,6 +127,7 @@ public class ShowActivity extends AppCompatActivity {
                 report = Serializer.deserialize(inputData, Report.class);
                 NetworksAdapter adapter = (NetworksAdapter) showRecycler.getAdapter();
                 adapter.setReport(report);
+                showRecycler.setAdapter(adapter);
                 showRecycler.invalidate();
                 findViewById(R.id.show_button_send).setEnabled(true);
             }
